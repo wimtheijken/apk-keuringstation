@@ -1,7 +1,7 @@
 package nl.theijken.apkkeuringsation.repository;
 
 import nl.theijken.apkkeuringsation.model.Role;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface RoleRepository extends CrudRepository<Role, String> {
+public interface RoleRepository extends JpaRepository<Role, String> {
 }

@@ -6,6 +6,8 @@ import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
 import java.util.Collection;
+import java.util.Set;
+
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -13,7 +15,7 @@ public class Role {
     private String rolename;
 
     @ManyToMany(mappedBy = "roles")
-    private Collection<User> users;
+    private Set<User> users;
 
     public String getRolename() {
         return rolename;

@@ -2,7 +2,7 @@
 
 -- noinspection SqlNoDataSourceInspectionForFile
 
-insert into roles(rolename) values  ('ROLE_ADMIN'), ('ROLE_MECHANIC'), ('ROLE_CASHIER');
+insert into roles(rolename) values  ('ROLE_USER'), ('ROLE_ADMIN'), ('ROLE_MECHANIC'), ('ROLE_CASHIER');
 
 --   username: admin, password: admin
 insert into users(username, password) values ('admin', '$2a$12$qrE6TwOWnTQJiJa7TNC7/.k127kBw1NEPoGOeykZ8hzmqN3baG4xS');
