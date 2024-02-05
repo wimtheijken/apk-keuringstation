@@ -1,6 +1,9 @@
 package nl.theijken.apkkeuringsation.dto;
 
+import nl.theijken.apkkeuringsation.model.Car;
+
 import java.time.LocalDate;
+import java.util.Set;
 
 
 public class CustomerDto {
@@ -11,7 +14,7 @@ public class CustomerDto {
 
     public String lastName;
 
-//    public LocalDate dob;
+    public LocalDate dob;
 
-//    public String[] cars;
+    public Set<Car> cars;
 }

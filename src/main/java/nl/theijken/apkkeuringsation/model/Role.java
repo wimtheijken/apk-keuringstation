@@ -21,7 +21,4 @@ public class Role {
         return rolename;
     }
 
-    public void setRolename(String rolename) {
-        this.rolename = rolename;
-    }
 }

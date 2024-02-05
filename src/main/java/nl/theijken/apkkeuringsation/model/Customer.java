@@ -3,7 +3,9 @@ package nl.theijken.apkkeuringsation.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "customers")
@@ -19,7 +21,10 @@ public class Customer {
     @Column(name="last_name", length = 128)
     private String lastName;
 
-    //    private LocalDate dob;
+    private LocalDate dob;
+
+    @OneToMany(mappedBy = "customer")
+    private Set<Car> cars = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -41,7 +46,7 @@ public class Customer {
         this.lastName = lastName;
     }
 
-  /*  public LocalDate getDob() {
+    public LocalDate getDob() {
         return dob;
     }
 
@@ -49,15 +54,12 @@ public class Customer {
         this.dob = dob;
     }
 
-    public List<Car> getCars() {
+    public Set<Car> getCars() {
         return cars;
     }
 
-    public void setCars(List<Car> cars) {
+    public void setCars(Set<Car> cars) {
         this.cars = cars;
     }
-
-    @OneToMany(mappedBy = "customer")
-    private List<Car> cars;*/
 
 }

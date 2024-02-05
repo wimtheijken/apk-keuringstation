@@ -1,48 +1,55 @@
 package nl.theijken.apkkeuringsation.controller;
 
+import jakarta.validation.Valid;
+import nl.theijken.apkkeuringsation.dto.CustomerDto;
 import nl.theijken.apkkeuringsation.dto.UserDto;
+import nl.theijken.apkkeuringsation.service.UserService;
 import nl.theijken.apkkeuringsation.model.Role;
 import nl.theijken.apkkeuringsation.model.User;
 import nl.theijken.apkkeuringsation.repository.RoleRepository;
 import nl.theijken.apkkeuringsation.repository.UserRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URI;
 import java.util.Optional;
 import java.util.Set;
 
 @RestController
 public class UserController {
+    private final UserService service;
 
-    private final UserRepository userRepos;
-    private final RoleRepository roleRepos;
-    private final PasswordEncoder encoder;
-
-    public UserController(UserRepository userRepos, RoleRepository roleRepos, PasswordEncoder encoder) {
-        this.userRepos = userRepos;
-        this.roleRepos = roleRepos;
-        this.encoder = encoder;
+    public UserController(UserService service) {
+        this.service = service;
     }
+
     @PostMapping("/users")
-    public String createUser(@RequestBody UserDto userDto) {
-        User newUser = new User();
-        newUser.setUsername(userDto.username);
-        newUser.setPassword(encoder.encode(userDto.password));
+    public ResponseEntity<Object> createUser(@Valid @RequestBody UserDto userDto, BindingResult br) {
 
-        Set<Role> userRoles = newUser.getRoles();
-        for (String rolename : userDto.roles) {
-            Optional<Role> or = roleRepos.findById("ROLE_" + rolename);
-            if (or.isPresent()) {
-                userRoles.add(or.get());
+        if (br.hasFieldErrors()) {
+            StringBuilder sb = new StringBuilder();
+            for (FieldError fe : br.getFieldErrors()) {
+                sb.append(fe.getField());
+                sb.append(" : ");
+                sb.append(fe.getDefaultMessage());
+                sb.append("\n");
             }
+            return ResponseEntity.badRequest().body(sb.toString());
+        } else {
+            userDto = service.createUser(userDto);
+
+            URI uri = URI.create(
+                    ServletUriComponentsBuilder
+                            .fromCurrentRequest()
+                            .path("/" + userDto.username).toUriString());
+
+            return ResponseEntity.created(uri).body(userDto);
         }
-
-        userRepos.save(newUser);
-
-        return "Done";
     }
 }

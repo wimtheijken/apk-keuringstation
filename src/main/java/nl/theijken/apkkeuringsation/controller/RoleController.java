@@ -1,29 +1,29 @@
 package nl.theijken.apkkeuringsation.controller;
 
+import jakarta.validation.Valid;
 import nl.theijken.apkkeuringsation.dto.RoleDto;
-import nl.theijken.apkkeuringsation.model.Role;
-import nl.theijken.apkkeuringsation.repository.RoleRepository;
+import nl.theijken.apkkeuringsation.service.RoleService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@RequestMapping("/roles")
 public class RoleController {
-    private final RoleRepository repos;
+    private final RoleService service;
 
-    public RoleController(RoleRepository repos) {
-        this.repos = repos;
-    }
-    @GetMapping("/roles")
-    public List<RoleDto> getRoles() {
-        List<RoleDto> roleDtos = new ArrayList<>();
-        for (Role r : repos.findAll()) {
-            RoleDto rdto = new RoleDto();
-            rdto.rolename = r.getRolename();
-            roleDtos.add(rdto);
+    public RoleController(RoleService service) { this.service = service; }
+    @GetMapping()
+    public ResponseEntity<List> getAllRoles() {
+            return ResponseEntity.ok(service.GetAllRoles());
         }
-        return roleDtos;
-    }
 }

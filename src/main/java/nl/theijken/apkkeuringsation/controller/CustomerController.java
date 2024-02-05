@@ -1,12 +1,11 @@
 package nl.theijken.apkkeuringsation.controller;
 
-
+import jakarta.validation.Valid;
 import nl.theijken.apkkeuringsation.dto.CustomerDto;
 import nl.theijken.apkkeuringsation.service.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +25,7 @@ public class CustomerController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createCustomer(@Validated @RequestBody CustomerDto customerDto, BindingResult br) {
+    public ResponseEntity<Object> createCustomer(@Valid @RequestBody CustomerDto customerDto, BindingResult br) {
 
         if (br.hasFieldErrors()) {
             StringBuilder sb = new StringBuilder();

@@ -10,10 +10,10 @@ import java.util.List;
 
 @Service
 public class TeacherService {
-    private final TeacherRepository repos;
+    private final TeacherRepository repository;
 
-    public TeacherService(TeacherRepository repos) {
-        this.repos = repos;
+    public TeacherService(TeacherRepository repository) {
+        this.repository = repository;
     }
 
     // mapperfunctie maken
@@ -22,17 +22,17 @@ public class TeacherService {
         teacher.setFirstName(teacherDto.firstName);
         teacher.setLastName(teacherDto.lastName);
         teacher.setDob(teacherDto.dob);
-        repos.save(teacher);
+        repository.save(teacher);
         teacherDto.id = teacher.getId();
 
         return teacherDto;
     }
 
     public List<TeacherDto> GetTeacher() {
-        List<Teacher> techers = repos.findAll();
+        List<Teacher> teachers = repository.findAll();
         List<TeacherDto> teacherDtos = new ArrayList<>();
 
-        for(Teacher teacher : techers) {
+        for(Teacher teacher : teachers) {
             TeacherDto teacherDto = new TeacherDto();
 
             teacherDto.id = teacher.getId();

@@ -10,45 +10,40 @@ import java.util.List;
 @Service
 public class CustomerService {
 
-    private final CustomerRepository repos;
+    private final CustomerRepository customerRepository;
 
-    public CustomerService(CustomerRepository repos) {
-        this.repos = repos;
+    public CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository= customerRepository;
     }
 
     public CustomerDto createCustomer(CustomerDto customerDto) {
         Customer customer = new Customer();
         customer.setFirstName(customerDto.firstName);
         customer.setLastName(customerDto.lastName);
-//        customer.setDob(customerDto.dob);
-        repos.save(customer);
+        customer.setDob(customerDto.dob);
+        customer.setCars(customerDto.cars);
+        customerRepository.save(customer);
         customerDto.id = customer.getId();
 
         return customerDto;
     }
 
-    public List<CustomerDto> GetTeacher() {
-        List<Customer> customers = repos.findAll();
+    public List<CustomerDto> GetCustomer() {
+        List<Customer> customers = customerRepository.findAll();
         List<CustomerDto> customerDtos = new ArrayList<>();
 
         for(Customer customer : customers) {
             CustomerDto customerDto = new CustomerDto();
-
             customerDto.id = customer.getId();
-
             customerDto.firstName = customer.getFirstName();
-
             customerDto.lastName = customer.getLastName();
-
-//            customerDto.dob = customer.getDob();
-
+            customerDto.dob = customer.getDob();
+            customerDto.cars = customer.getCars();
             customerDtos.add(customerDto);
-
         }
 
         return customerDtos;
 
     }
-
 
 }

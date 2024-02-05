@@ -12,6 +12,8 @@ public class CarDto {
 
     public String type;
 
+    public String color;
+
     public LocalDate age;
 
     public Customer customer;

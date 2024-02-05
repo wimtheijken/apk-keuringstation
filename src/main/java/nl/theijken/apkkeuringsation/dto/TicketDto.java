@@ -5,13 +5,18 @@ import jakarta.persistence.OneToOne;
 import nl.theijken.apkkeuringsation.model.Action;
 import nl.theijken.apkkeuringsation.model.Invoice;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class TicketDto {
 
-    //    private localDate age;
+    public  Long id;
 
-    private List<Action> action;
+    public  LocalDate date;
 
-    private Invoice invoice;
+    public double price;
+
+    public  List<Action> actions;
+
+    public Invoice invoice;
 }

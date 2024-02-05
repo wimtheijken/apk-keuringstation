@@ -1,53 +1,45 @@
 package nl.theijken.apkkeuringsation.service;
 
 import nl.theijken.apkkeuringsation.dto.CarPartDto;
-import nl.theijken.apkkeuringsation.repository.CarPartRepository;
 import nl.theijken.apkkeuringsation.model.CarPart;
+import nl.theijken.apkkeuringsation.repository.CarPartRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class CarPartService {
 
-    private final CarPartRepository carPartRepos;
+    private final CarPartRepository repos;
 
     public CarPartService(CarPartRepository repos) {
-        this.carPartRepos = repos;
+        this.repos = repos;
     }
 
-/*
-    public OrderService(CarPartRepository repos) {
-        this.carPartRepos = repos;
+    public CarPartDto createCarPart(CarPartDto carPartDto) {
+        CarPart carPart = new CarPart();
+        carPart.setName(carPartDto.name);
+        carPart.setPrice(carPartDto.price);
+        carPart.setAction(carPartDto.action);
+        repos.save(carPart);
+        carPartDto.id = carPart.getId();
+        return carPartDto;
     }
-    public int putCarPart(CarPartDto newOrderDto) {
-        CarPart o = new CarPart(newOrderDto.productname, newCarPartDto.unitprice, newCarPartDto.quantity);
 
-        carPartRepos.save(o);
+    public List<CarPartDto> GetCarPart() {
+        List<CarPart> carParts = repos.findAll();
+        List<CarPartDto> carPartDtos = new ArrayList<>();
 
-        return o.getCarPartid();
-    }
-    public CarPartDto getOrder(int orderid) {
-        Optional<CarPart> oo = carPartRepos.findById(carPartid);
-        if (oo.isPresent()) {
-            CarPart o = oo.get();
-            CarPartDto odto = new CarPartDto();
-            odto.orderid = o.getCarPartid();
-            odto.productname = o.getProductname();
-            odto.unitprice = o.getUnitprice();
-            odto.quantity = o.getQuantity();
-
-            return odto;
+        for(CarPart carPart : carParts) {
+            CarPartDto carPartDto = new CarPartDto();
+            carPartDto.id = carPart.getId();
+            carPartDto.name = carPart.getName();
+            carPartDto.price = carPart.getPrice();
+            carPartDto.action = carPart.getAction();
+            carPartDtos.add(carPartDto);
         }
-        return null;
+        return carPartDtos;
     }
-
-    public double getAmount(int carPartid) {
-        Optional<CarPart> oo = carPartRepos.findById(orderid);
-        if (oo.isPresent()) {
-            CarPart o = oo.get();
-            return o.calculateAmount();
-        }
-        return -1;
-    }*/
 }

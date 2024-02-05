@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class InvoiceService {
-    private final InvoiceRepository invoiceRepos;
+    private final InvoiceRepository repos;
 
     public InvoiceService(InvoiceRepository repos) {
-        this.invoiceRepos = repos;
+        this.repos = repos;
     }
 
 }
