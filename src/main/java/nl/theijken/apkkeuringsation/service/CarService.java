@@ -3,6 +3,7 @@ package nl.theijken.apkkeuringsation.service;
 import nl.theijken.apkkeuringsation.dto.CarDto;
 import nl.theijken.apkkeuringsation.exceptions.RecordNotFoundException;
 import nl.theijken.apkkeuringsation.model.Car;
+import nl.theijken.apkkeuringsation.model.Customer;
 import nl.theijken.apkkeuringsation.repository.CarRepository;
 import nl.theijken.apkkeuringsation.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,42 @@ public class CarService {
         this.customerRepository = customerRepository;
         this.customerService = customerService;
     }
+//    public CarDto addCar(CarDto carDto) {
+//
+//        Car car = dtoToCar(carDto);
+//        if (carDto.customer != null) {
+//            Optional<Customer> optionalCustomer = customerRepository.findById(carDto.customer);
+//            if (optionalCustomer.isEmpty()) {
+//                throw new RecordNotFoundException("Customer with id " + carDto.customer + " not found");
+//            }
+//            Customer customer = optionalCustomer.get();
+//            car.setCustomer(customer);
+//            customer.setCars(car);
+//            carRepository.save(car);
+//            customerRepository.save(customer);
+//            return carToDto(car);
+//        }
+//        Car savedCar = carRepository.save(car);
+//        return carToDto(savedCar);
+//    }
+//    public CarDto addCar(CarDto carDto) {
+//
+//        Car car = dtoToCar(carDto);
+//        if (carDto.customer != null) {
+//            Optional<Customer> optionalCustomer = customerRepository.findById(carDto.customer);
+//            if (optionalCustomer.isEmpty()) {
+//                throw new RecordNotFoundException("Customer with id " + carDto.customer + " not found");
+//            }
+//            Customer customer = optionalCustomer.get();
+//            car.setCustomer(customer);
+//            customer.setCars(car);
+//            carRepository.save(car);
+//            customerRepository.save(customer);
+//            return carToDto(car);
+//        }
+//        Car savedCar = carRepository.save(car);
+//        return carToDto(savedCar);
+//    }
 
     public CarDto createCar(CarDto carDto) {
         Car car = new Car();
@@ -69,5 +106,34 @@ public class CarService {
         } else {
             throw new RecordNotFoundException();
         }
+    }
+    public CarDto dtoToCar(CarDto carDto) {
+        Car car = new Car();
+        car.setLicensePlate(carDto.licensePlate);
+        car.setBrand(carDto.brand);
+        car.setType(carDto.type);
+        car.setColor(carDto.color);
+        car.setAge(carDto.age);
+        car.setCustomer(carDto.customer);
+        carRepository.save(car);
+
+        return carDto;
+    }
+
+    public List<CarDto> carToDto() {
+        List<Car> cars = carRepository.findAll();
+        List<CarDto> carDtos = new ArrayList<>();
+
+        for(Car car : cars) {
+            CarDto carDto = new CarDto();
+            carDto.licensePlate = car.getLicensePlate();
+            carDto.brand = car.getBrand();
+            carDto.type = car.getType();
+            carDto.color = car.getColor();
+            carDto.age = car.getAge();
+            carDto.customer = car.getCustomer();
+            carDtos.add(carDto);
+        }
+        return carDtos;
     }
 }
