@@ -1,36 +1,30 @@
 package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
-import nl.theijken.apkkeuringsation.dto.CustomerDto;
-import nl.theijken.apkkeuringsation.dto.UserDto;
-import nl.theijken.apkkeuringsation.service.UserService;
-import nl.theijken.apkkeuringsation.model.Role;
-import nl.theijken.apkkeuringsation.model.User;
-import nl.theijken.apkkeuringsation.repository.RoleRepository;
-import nl.theijken.apkkeuringsation.repository.UserRepository;
+import nl.theijken.apkkeuringsation.dto.TicketDto;
+import nl.theijken.apkkeuringsation.service.TicketService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Optional;
-import java.util.Set;
 
 @RestController
-public class UserController {
-    private final UserService service;
+@RequestMapping("/tickets")
+public class TicketController {
+    private final TicketService service;
 
-    public UserController(UserService service) {
+    public TicketController(TicketService service) {
         this.service = service;
     }
 
-    @PostMapping("/users")
-    public ResponseEntity<Object> createUser(@Valid @RequestBody UserDto userDto, BindingResult br) {
+    @PostMapping
+    public ResponseEntity<Object> createTicket(@Valid @RequestBody TicketDto ticketDto, BindingResult br) {
 
         if (br.hasFieldErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -42,14 +36,14 @@ public class UserController {
             }
             return ResponseEntity.badRequest().body(sb.toString());
         } else {
-            userDto = service.createUser(userDto);
+            ticketDto = service.createTicket(ticketDto);
 
             URI uri = URI.create(
                     ServletUriComponentsBuilder
                             .fromCurrentRequest()
-                            .path("/" + userDto.username).toUriString());
+                            .path("/" + ticketDto.id).toUriString());
 
-            return ResponseEntity.created(uri).body(userDto);
+            return ResponseEntity.created(uri).body(ticketDto);
         }
     }
 }

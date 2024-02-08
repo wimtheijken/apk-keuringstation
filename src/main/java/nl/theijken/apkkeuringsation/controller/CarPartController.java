@@ -1,36 +1,33 @@
 package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
+import nl.theijken.apkkeuringsation.dto.CarPartDto;
 import nl.theijken.apkkeuringsation.dto.CustomerDto;
-import nl.theijken.apkkeuringsation.dto.UserDto;
-import nl.theijken.apkkeuringsation.service.UserService;
-import nl.theijken.apkkeuringsation.model.Role;
-import nl.theijken.apkkeuringsation.model.User;
-import nl.theijken.apkkeuringsation.repository.RoleRepository;
-import nl.theijken.apkkeuringsation.repository.UserRepository;
+import nl.theijken.apkkeuringsation.service.CarPartService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Optional;
-import java.util.Set;
 
 @RestController
-public class UserController {
-    private final UserService service;
+@RequestMapping("/carparts")
+public class CarPartController {
 
-    public UserController(UserService service) {
+    private final CarPartService service;
+
+    public CarPartController(CarPartService service) {
         this.service = service;
     }
-
-    @PostMapping("/users")
-    public ResponseEntity<Object> createUser(@Valid @RequestBody UserDto userDto, BindingResult br) {
+    @PostMapping
+    public ResponseEntity<Object> createCarPart(@Valid @RequestBody CarPartDto carPartDto, BindingResult br) {
 
         if (br.hasFieldErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -42,14 +39,14 @@ public class UserController {
             }
             return ResponseEntity.badRequest().body(sb.toString());
         } else {
-            userDto = service.createUser(userDto);
+            carPartDto = service.createCarPart(carPartDto);
 
             URI uri = URI.create(
                     ServletUriComponentsBuilder
                             .fromCurrentRequest()
-                            .path("/" + userDto.username).toUriString());
+                            .path("/" + carPartDto.id).toUriString());
 
-            return ResponseEntity.created(uri).body(userDto);
+            return ResponseEntity.created(uri).body(carPartDto);
         }
     }
 }
