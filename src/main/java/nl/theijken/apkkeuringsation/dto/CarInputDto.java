@@ -1,12 +1,10 @@
 package nl.theijken.apkkeuringsation.dto;
 
-import nl.theijken.apkkeuringsation.model.Customer;
 
-import javax.xml.transform.sax.SAXResult;
+
 import java.time.LocalDate;
 
-public class CarDto {
-
+public class CarInputDto {
     public String licensePlate;
 
     public String brand;
@@ -17,5 +15,5 @@ public class CarDto {
 
     public LocalDate age;
 
-    public String customerFullName;
+    public Long customerId;
 }

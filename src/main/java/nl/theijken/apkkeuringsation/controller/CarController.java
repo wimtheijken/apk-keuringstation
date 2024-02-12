@@ -2,6 +2,7 @@ package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
 import nl.theijken.apkkeuringsation.dto.CarDto;
+import nl.theijken.apkkeuringsation.dto.CarInputDto;
 import nl.theijken.apkkeuringsation.service.CarService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -22,8 +24,9 @@ public class CarController {
     public CarController(CarService service) {
         this.service = service;
     }
+
     @PostMapping
-    public ResponseEntity<Object> createCar(@Valid @RequestBody CarDto carDto, BindingResult br) {
+    public ResponseEntity<Object> createCar(@Valid @RequestBody CarInputDto carDto, BindingResult br) {
 
         if (br.hasFieldErrors()) {
             StringBuilder sb = new StringBuilder();
@@ -35,20 +38,25 @@ public class CarController {
             }
             return ResponseEntity.badRequest().body(sb.toString());
         } else {
-            carDto = service.createCar(carDto);
+            CarDto car1 = service.createCar(carDto);
 
             URI uri = URI.create(
                     ServletUriComponentsBuilder
                             .fromCurrentRequest()
-                            .path("/" + carDto.licensePlate).toUriString());
+                            .path("/" + car1.licensePlate).toUriString());
 
-            return ResponseEntity.created(uri).body(carDto);
+            return ResponseEntity.created(uri).body(car1);
         }
     }
 
     @PutMapping("{licensePlate}/{customerId}")
-    public ResponseEntity<Object> assignCustomerToCar(@PathVariable("licensePlate") Long id, @PathVariable("customerId") Long customerId) {
+    public ResponseEntity<Object> assignCustomerToCar(@PathVariable("licensePlate") String id, @PathVariable("customerId") Long customerId) {
         service.assignCustomerToCar(id, customerId);
         return ResponseEntity.noContent().build();
     }
+
+//    @GetMapping("{licensePlate}")
+//    public ResponseEntity<List<CarDto>> getCars() {
+//        return List<CarDto> getCars();
+//    }
 }

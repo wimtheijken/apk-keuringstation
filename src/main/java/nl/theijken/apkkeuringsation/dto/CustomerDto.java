@@ -16,5 +16,5 @@ public class CustomerDto {
 
     public LocalDate dob;
 
-    public Set<Car> cars;
+    public Set<CarDto> cars;
 }
