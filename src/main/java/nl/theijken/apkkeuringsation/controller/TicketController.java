@@ -1,18 +1,17 @@
 package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
+import nl.theijken.apkkeuringsation.dto.CustomerDto;
 import nl.theijken.apkkeuringsation.dto.TicketDto;
 import nl.theijken.apkkeuringsation.service.TicketService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/tickets")
@@ -45,5 +44,9 @@ public class TicketController {
 
             return ResponseEntity.created(uri).body(ticketDto);
         }
+    }
+    @GetMapping
+    public ResponseEntity<List<TicketDto>> getAllTickets(){
+        return ResponseEntity.ok(service.GetTickets());
     }
 }

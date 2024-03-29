@@ -29,7 +29,7 @@ public class TicketService {
         return ticketDto;
     }
 
-    public List<TicketDto> GetTicket() {
+    public List<TicketDto> GetTickets() {
         List<Ticket> tickets = repos.findAll();
         List<TicketDto> ticketDtos = new ArrayList<>();
 

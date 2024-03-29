@@ -9,10 +9,7 @@ import nl.theijken.apkkeuringsation.repository.CarRepository;
 import nl.theijken.apkkeuringsation.repository.CustomerRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CarService {
@@ -32,24 +29,29 @@ public class CarService {
         return carToDto(savedCar);
     }
 
-    public List<Car> getCars() {
-//        List<Car> cars = carRepository.findAll();
-        return carRepository.findAll();
-    }
-
-    public void assignCustomerToCar(String id, Long customerId) {
-        Optional<Car> optionalCar = carRepository.findById(id);
-        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
-
-        if (optionalCar.isPresent() && optionalCustomer.isPresent()) {
-            Car car = optionalCar.get();
-            Customer customer = optionalCustomer.get();
-            car.setCustomer(customer);
-            carRepository.save(car);
-        } else {
-            throw new RecordNotFoundException("Car or customer not found");
+    public List<CarDto> getCars() {
+        List<Car> cars = carRepository.findAll();
+        List<CarDto> carDtos = new ArrayList<>();
+        for( Car car : cars ) {
+            CarDto carDto = carToDto(car);
+            carDtos.add(carDto);
         }
+        return carDtos;
     }
+
+//    public void assignCustomerToCar(String id, Long customerId) {
+//        Optional<Car> optionalCar = carRepository.findById(id);
+//        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
+//
+//        if (optionalCar.isPresent() && optionalCustomer.isPresent()) {
+//            Car car = optionalCar.get();
+//            Customer customer = optionalCustomer.get();
+//            car.setCustomer(customer);
+//            carRepository.save(car);
+//        } else {
+//            throw new RecordNotFoundException("Car or customer not found");
+//        }
+//    }
 
     private Car idtoToCar(CarInputDto carDto) {
         Car car = new Car();

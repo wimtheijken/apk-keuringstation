@@ -12,13 +12,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 @Service
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
     private final CarService carService;
-
 
     public CustomerService(CustomerRepository customerRepository, CarService carService) {
         this.customerRepository = customerRepository;

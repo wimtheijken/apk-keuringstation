@@ -49,14 +49,8 @@ public class CarController {
         }
     }
 
-    @PutMapping("{licensePlate}/{customerId}")
-    public ResponseEntity<Object> assignCustomerToCar(@PathVariable("licensePlate") String id, @PathVariable("customerId") Long customerId) {
-        service.assignCustomerToCar(id, customerId);
-        return ResponseEntity.noContent().build();
+    @GetMapping
+    public ResponseEntity<List<CarDto>> getAllCars(){
+        return ResponseEntity.ok(service.getCars());
     }
-
-//    @GetMapping("{licensePlate}")
-//    public ResponseEntity<List<CarDto>> getCars() {
-//        return List<CarDto> getCars();
-//    }
 }
