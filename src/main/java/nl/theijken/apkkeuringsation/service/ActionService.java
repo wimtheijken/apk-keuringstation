@@ -21,7 +21,7 @@ public class ActionService {
         action.setDescription(actionDto.description);
         action.setHrRate(actionDto.hrRate);
         action.setLabour(actionDto.labour);
-        action.setCarParts(actionDto.carParts);
+//        action.setCarParts(actionDto.carParts);
         action.setTicket(actionDto.ticket);
         repos.save(action);
         actionDto.id = action.getId();
@@ -38,7 +38,7 @@ public class ActionService {
             actionDto.description = action.getDescription();
             actionDto.hrRate = action.getHrRate();
             actionDto.labour = action.getLabour();
-            actionDto.carParts = action.getCarParts();
+//            actionDto.carParts = action.getCarParts();
             actionDto.ticket = action.getTicket();
             actionDtos.add(actionDto);
         }

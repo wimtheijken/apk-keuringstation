@@ -22,13 +22,13 @@ public class CarPartService {
         CarPart carPart = new CarPart();
         carPart.setName(carPartDto.name);
         carPart.setPrice(carPartDto.price);
-        carPart.setAction(carPartDto.action);
+//        carPart.setAction(carPartDto.action);
         repos.save(carPart);
         carPartDto.id = carPart.getId();
         return carPartDto;
     }
 
-    public List<CarPartDto> GetCarPart() {
+    public List<CarPartDto> getCarParts() {
         List<CarPart> carParts = repos.findAll();
         List<CarPartDto> carPartDtos = new ArrayList<>();
 
@@ -37,7 +37,7 @@ public class CarPartService {
             carPartDto.id = carPart.getId();
             carPartDto.name = carPart.getName();
             carPartDto.price = carPart.getPrice();
-            carPartDto.action = carPart.getAction();
+//            carPartDto.actions = repos.carPartDto(carPart.getActions());
             carPartDtos.add(carPartDto);
         }
         return carPartDtos;

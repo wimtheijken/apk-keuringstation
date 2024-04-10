@@ -7,6 +7,7 @@ import nl.theijken.apkkeuringsation.model.CarPart;
 import nl.theijken.apkkeuringsation.model.Ticket;
 
 import java.util.List;
+import java.util.Set;
 
 public class ActionDto {
 
@@ -18,7 +19,7 @@ public class ActionDto {
 
     public double labour;
 
-    public List<CarPart> carParts;
+    public Set<CarPart> carParts;
 
     public Ticket ticket;
 }
