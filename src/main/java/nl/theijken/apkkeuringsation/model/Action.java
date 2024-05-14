@@ -22,32 +22,14 @@ public class Action {
 
     private double labour;
 
-    @ManyToMany(mappedBy = "actions")
-//    @JoinTable(
-//            name = "action_carparts", // Naam van de koppeltabel die de relatie tussen posts en categorieën beheert.
-//            joinColumns = @JoinColumn(name = "action_id"), // Kolomnaam in de koppeltabel verwijzend naar de 'post' entiteit.
-//            inverseJoinColumns = @JoinColumn(name = "carpart_id") // Kolomnaam in de koppeltabel verwijzend naar de 'category' entiteit.
-//    )
+    @ManyToMany
     private Set<CarPart> carParts = new HashSet<>();
-
-//    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}) // Definieert een veel-op-veel relatie, met cascade gedrag voor PERSIST en MERGE operaties.
-//    @JoinTable(
-//            name = "post_categories", // Naam van de koppeltabel die de relatie tussen posts en categorieën beheert.
-//            joinColumns = @JoinColumn(name = "post_id"), // Kolomnaam in de koppeltabel verwijzend naar de 'post' entiteit.
-//            inverseJoinColumns = @JoinColumn(name = "category_id") // Kolomnaam in de koppeltabel verwijzend naar de 'category' entiteit.
-//    )
-//    private List<Category> categories = new ArrayList<>(); // Lijst van categorieën waartoe de post behoort.
-
 
     @ManyToOne
     private Ticket ticket;
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getDescription() {

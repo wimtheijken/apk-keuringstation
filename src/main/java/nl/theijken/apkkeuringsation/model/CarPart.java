@@ -21,7 +21,7 @@ public class CarPart {
 
     private double price;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "carParts")
     @JsonBackReference
     private Set<Action> actions = new HashSet<>();
 

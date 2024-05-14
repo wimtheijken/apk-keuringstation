@@ -2,14 +2,12 @@ package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
 import nl.theijken.apkkeuringsation.dto.ActionDto;
+import nl.theijken.apkkeuringsation.dto.CarPartDto;
 import nl.theijken.apkkeuringsation.service.ActionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -46,4 +44,10 @@ public class ActionController {
             return ResponseEntity.created(uri).body(actionDto);
         }
     }
+
+//    @PutMapping("/action/{carparts}")
+//    public ResponseEntity<ActionDto> updateAction(@PathVariable("CarPart") CarPart carParts, @RequestBody ActionDto actionDto) {
+//        service.updateAction(carParts, ActionDto);
+//        return ResponseEntity.ok(actionDto);
+//    }
 }

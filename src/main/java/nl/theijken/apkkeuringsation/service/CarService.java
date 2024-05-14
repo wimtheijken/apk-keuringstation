@@ -39,20 +39,6 @@ public class CarService {
         return carDtos;
     }
 
-//    public void assignCustomerToCar(String id, Long customerId) {
-//        Optional<Car> optionalCar = carRepository.findById(id);
-//        Optional<Customer> optionalCustomer = customerRepository.findById(customerId);
-//
-//        if (optionalCar.isPresent() && optionalCustomer.isPresent()) {
-//            Car car = optionalCar.get();
-//            Customer customer = optionalCustomer.get();
-//            car.setCustomer(customer);
-//            carRepository.save(car);
-//        } else {
-//            throw new RecordNotFoundException("Car or customer not found");
-//        }
-//    }
-
     private Car idtoToCar(CarInputDto carDto) {
         Car car = new Car();
         car.setLicensePlate(carDto.licensePlate);
@@ -90,8 +76,6 @@ public class CarService {
         carDto.customerFullName = car.getCustomer() != null ? car.getCustomer().getFirstName() + " " + car.getCustomer().getLastName() : null;
         return carDto;
     }
-
-
 
     public  Set<CarDto> carsToDtos(Set<Car> cars) {
         Set<CarDto> carDtos = new HashSet<>();
