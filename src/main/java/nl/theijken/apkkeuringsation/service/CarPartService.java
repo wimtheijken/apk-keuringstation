@@ -26,34 +26,56 @@ public class CarPartService {
         carPart.setName(carPartDto.name);
         carPart.setPrice(carPartDto.price);
 //        carPart.setAction(carPartDto.action);
-        repos.save(carPart);
+        carPartRepository.save(carPart);
         carPartDto.id = carPart.getId();
         return carPartDto;
     }
 
-    public List<CarPartDto> getCarParts() {
-        List<CarPart> carParts = carPartRepository.findAll();
+    public List<CarPartDto> getCarParts(Set<CarPart> carParts) {
+//        List<CarPart> carParts = carPartRepository.findAll();
         List<CarPartDto> carPartDtos = new ArrayList<>();
 
-        for(CarPart carPart : carParts) {
-            CarPartDto carPartDto = new CarPartDto();
+        CarPartDto carPartDto;
+        for (CarPart carPart : carParts) {
+            carPartDto = new CarPartDto();
             carPartDto.id = carPart.getId();
             carPartDto.name = carPart.getName();
             carPartDto.price = carPart.getPrice();
 //            carPartDto.actions = repos.carPartDto(carPart.getActions());
-            carPartDtos.add(carPartDto);
         }
-        return carPartDtos;
+//            carPartDtos.add(carPartDto);
+//            return carPartDtos;
+            return null;
+
     }
 
-    private CarPart dtoToCarPart(CarPartDto carPartDto) {
-        CarPart carPart = new CarPart();
-        carPart.setName(carPartDto.name);
-        carPart.setPrice(carPartDto.price);
-        carPart.setActions(carPartDto.actions);
-        carPart = carPartRepository.save(carPart); // Save customer first
-        carPartDto.id = carPart.getId(); // Then set the ID in DTO
+//        public CarPart dtoToCarPart(Set<CarPartDto> carPartDto){
+////        CarPart carPart = new CarPart();
+////        carPart.setName(carPartDto.name);
+////        carPart.setPrice(carPartDto.price);
+////        carPart.setActions(carPartDto.actions);
+////        carPart = carPartRepository.save(carPart); // Save customer first
+////        carPartDto.id = carPart.getId(); // Then set the ID in DTO
+////
+////        return carPart;
+//            return null;
+//        }
 
-        return carPart;
+//        public CarPartDto carPartToDto (Set<CarPart> carPart){
+////        CarPartDto carPart = new CarPartDto();
+////        carPartDto.id = carPart.getId();
+////        carPartDto.name = carPart.getName();
+////        carPartDto.price = carPart.getPrice();
+////        carPartDto.actions = carPart.getActions();
+////        return carPart;
+//            return null;
+//        }
+
+//        public boolean exists(CarPartDto cartPart){
+//            return carPartRepository.existsByName(cartPart.name);
+//        }
+//
+//        public CarPart getCarPart(CarPartDto carPart){
+//            return carPartRepository.findByName(carPart.name);
+//        }
     }
-}

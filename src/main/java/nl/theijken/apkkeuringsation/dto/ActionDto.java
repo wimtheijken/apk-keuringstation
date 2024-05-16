@@ -19,7 +19,7 @@ public class ActionDto {
 
     public double labour;
 
-    public Set<CarPart> carParts;
+    public Set<CarPartDto> carParts;
 
     public Ticket ticket;
 }

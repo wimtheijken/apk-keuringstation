@@ -16,7 +16,7 @@ public class CarPart {
     @Id
     @GeneratedValue
     private Long id;
-
+    @Column(unique = true)
     private String name;
 
     private double price;
