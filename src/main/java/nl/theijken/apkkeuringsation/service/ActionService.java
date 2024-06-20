@@ -1,9 +1,12 @@
 package nl.theijken.apkkeuringsation.service;
 
 import nl.theijken.apkkeuringsation.dto.ActionDto;
+import nl.theijken.apkkeuringsation.dto.CarDto;
 import nl.theijken.apkkeuringsation.dto.CarPartDto;
 import nl.theijken.apkkeuringsation.model.Action;
+import nl.theijken.apkkeuringsation.model.Car;
 import nl.theijken.apkkeuringsation.model.CarPart;
+import nl.theijken.apkkeuringsation.model.Ticket;
 import nl.theijken.apkkeuringsation.repository.ActionRepository;
 import nl.theijken.apkkeuringsation.repository.CarPartRepository;
 import org.springframework.stereotype.Service;
@@ -102,7 +105,26 @@ public class ActionService {
 //        actionDto.customerFullName = car.getCustomer() != null ? car.getCustomer().getFirstName() + " " + car.getCustomer().getLastName() : null;
         return actionDto;
     }
+    public List<CarDto> getActions() {
+        List<Action> actions = actionRepository.findAll();
+        List<ActionDto> actionDtos = new ArrayList<>();
+        for( Action action : actions ) {
+            ActionDto actionDto = actionsToDtos(action);
+            actionDtos.add(actionDto);
+        }
+//        return actionDtos;
+        return null;
+    }
 
+    private ActionDto actionsToDtos(Action action) {
+        ActionDto actionDto = new ActionDto();
+        actionDto.id = action.getId();
+        actionDto.description = action.getDescription();
+        actionDto.hrRate = action.getHrRate();
+        actionDto.labour = action.getLabour();
+//        actionDto.carParts = carpartService.carParsToDtos(action.getCarParts());
+        return actionDto;
+    }
 //    public void updateAction(Long id, CIModuleDto ciModuleDto) {
 //        if(!ciModuleRepository.existsById(id)) {
 //            throw new RecordNotFoundException("No ci-module found");

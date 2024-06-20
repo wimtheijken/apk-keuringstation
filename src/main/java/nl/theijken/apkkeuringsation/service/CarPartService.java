@@ -1,16 +1,12 @@
 package nl.theijken.apkkeuringsation.service;
 
-import nl.theijken.apkkeuringsation.dto.ActionDto;
 import nl.theijken.apkkeuringsation.dto.CarPartDto;
-import nl.theijken.apkkeuringsation.model.Action;
 import nl.theijken.apkkeuringsation.model.CarPart;
 import nl.theijken.apkkeuringsation.repository.CarPartRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class CarPartService {
@@ -31,24 +27,26 @@ public class CarPartService {
         return carPartDto;
     }
 
-    public List<CarPartDto> getCarParts(Set<CarPart> carParts) {
-//        List<CarPart> carParts = carPartRepository.findAll();
+    public List<CarPartDto> getCarParts() {
+        List<CarPart> carParts = carPartRepository.findAll();
         List<CarPartDto> carPartDtos = new ArrayList<>();
 
-        CarPartDto carPartDto;
         for (CarPart carPart : carParts) {
-            carPartDto = new CarPartDto();
-            carPartDto.id = carPart.getId();
-            carPartDto.name = carPart.getName();
-            carPartDto.price = carPart.getPrice();
-//            carPartDto.actions = repos.carPartDto(carPart.getActions());
+            CarPartDto carPartDto = carParsToDtos(carPart);
+            carPartDtos.add(carPartDto);
         }
-//            carPartDtos.add(carPartDto);
-//            return carPartDtos;
-            return null;
+            return carPartDtos;
 
     }
 
+    private CarPartDto carParsToDtos(CarPart carPart) {
+        CarPartDto carPartDto = new CarPartDto();
+        carPartDto.id = carPart.getId();
+        carPartDto.name = carPart.getName();
+        carPartDto.price = carPart.getPrice();
+//        carPartDto.actions = ActionService.actionsToDtos(carPart.getActions());
+        return carPartDto;
+    }
 //        public CarPart dtoToCarPart(Set<CarPartDto> carPartDto){
 ////        CarPart carPart = new CarPart();
 ////        carPart.setName(carPartDto.name);
