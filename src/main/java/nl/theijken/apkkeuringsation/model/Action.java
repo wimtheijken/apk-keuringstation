@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "actions")
@@ -19,22 +21,15 @@ public class Action {
     private double hrRate;
 
     private double labour;
-//    @OneToMany(mappedBy = "wallBracket")
-//    @JsonIgnore
-//    List<TelevisionWallBracket> televisionWallBrackets;
-    @OneToMany(mappedBy = "action")
-    @JsonIgnore
-    private List<CarPart> carParts = new ArrayList<>();
+
+    @ManyToMany
+    private Set<CarPart> carParts = new HashSet<>();
 
     @ManyToOne
     private Ticket ticket;
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getDescription() {
@@ -61,11 +56,11 @@ public class Action {
         this.labour = labour;
     }
 
-    public List<CarPart> getCarParts() {
+    public Set<CarPart> getCarParts() {
         return carParts;
     }
 
-    public void setCarParts(List<CarPart> carParts) {
+    public void setCarParts(Set<CarPart> carParts) {
         this.carParts = carParts;
     }
 
