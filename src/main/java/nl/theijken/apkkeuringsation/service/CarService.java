@@ -1,9 +1,12 @@
 package nl.theijken.apkkeuringsation.service;
 
+import nl.theijken.apkkeuringsation.dto.ActionDto;
 import nl.theijken.apkkeuringsation.dto.CarDto;
 import nl.theijken.apkkeuringsation.dto.CarInputDto;
 import nl.theijken.apkkeuringsation.exceptions.RecordNotFoundException;
+import nl.theijken.apkkeuringsation.model.Action;
 import nl.theijken.apkkeuringsation.model.Car;
+import nl.theijken.apkkeuringsation.model.CarPart;
 import nl.theijken.apkkeuringsation.model.Customer;
 import nl.theijken.apkkeuringsation.repository.CarRepository;
 import nl.theijken.apkkeuringsation.repository.CustomerRepository;
@@ -24,7 +27,7 @@ public class CarService {
     }
 
     public CarDto createCar(CarInputDto carDto) {
-        Car car = idtoToCar(carDto);
+        Car car = dtoToCar(carDto);
         Car savedCar = carRepository.save(car);
         return carToDto(savedCar);
     }
@@ -39,7 +42,46 @@ public class CarService {
         return carDtos;
     }
 
-    private Car idtoToCar(CarInputDto carDto) {
+    // GET ONE
+    public CarDto getCar(String licensePlate) {
+        Optional<Car> car = carRepository.findById(String.valueOf(licensePlate));
+        if( car.isPresent() ){
+            return carToDto(car.get());
+        } else {
+            throw new RecordNotFoundException("No car found");
+        }
+    }
+
+    // DELETE
+    public boolean deleteAction(String licensePlate) {
+        if(carRepository.existsById(String.valueOf(licensePlate))) {
+            carRepository.deleteById(String.valueOf(licensePlate));
+            return true;
+        }
+        return false;
+    }
+
+    // PUT
+    public CarDto updateCar(String licensePlate, CarInputDto carDto) {
+        if(!carRepository.existsById(String.valueOf(licensePlate))) {
+            throw new RecordNotFoundException("No car found");
+        }
+        Car storedCar = carRepository.findById(String.valueOf(licensePlate)).orElse(null);
+        storedCar.setLicensePlate(carDto.licensePlate);
+        storedCar.setBrand(carDto.brand);
+        storedCar.setType(carDto.type);
+        storedCar.setColor(carDto.color);
+        storedCar.setAge(carDto.age);
+        if(carDto.customerId != null){
+            Optional<Customer> customer = customerRepository.findById(carDto.customerId);
+            if(customer.isPresent()){
+                storedCar.setCustomer(customer.get());
+            }
+        }
+        return carToDto(carRepository.save(storedCar));
+    }
+
+    private Car dtoToCar(CarInputDto carDto) {
         Car car = new Car();
         car.setLicensePlate(carDto.licensePlate);
         car.setBrand(carDto.brand);

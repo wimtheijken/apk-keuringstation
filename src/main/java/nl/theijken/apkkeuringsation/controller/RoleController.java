@@ -24,6 +24,6 @@ public class RoleController {
     public RoleController(RoleService service) { this.service = service; }
     @GetMapping()
     public ResponseEntity<List> getAllRoles() {
-            return ResponseEntity.ok(service.GetAllRoles());
+            return ResponseEntity.ok(service.getAllRoles());
         }
 }

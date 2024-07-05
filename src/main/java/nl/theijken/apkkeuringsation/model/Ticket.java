@@ -28,6 +28,8 @@ public class Ticket {
         return id;
     }
 
+    public void setId(Long id) {}
+
     public LocalDate getDate() {
         return date;
     }

@@ -1,6 +1,7 @@
 package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
+import nl.theijken.apkkeuringsation.dto.ActionDto;
 import nl.theijken.apkkeuringsation.dto.CarDto;
 import nl.theijken.apkkeuringsation.dto.CarInputDto;
 import nl.theijken.apkkeuringsation.service.CarService;
@@ -49,8 +50,29 @@ public class CarController {
         }
     }
 
+    @PutMapping("/{licensePlate}")
+    public ResponseEntity<CarDto> updateCar(@PathVariable("licensePlate") String licensePlate, @RequestBody CarInputDto carDto) {
+        return ResponseEntity.ok(service.updateCar(licensePlate, carDto));
+    }
+
     @GetMapping
     public ResponseEntity<List<CarDto>> getAllCars(){
         return ResponseEntity.ok(service.getCars());
+    }
+
+
+    @GetMapping("/{licensePlate}")
+    public ResponseEntity<CarDto> getCar(@PathVariable("licensePlate") String licensePlate) {
+        return ResponseEntity.ok(service.getCar(licensePlate));
+    }
+
+    @DeleteMapping("/{licensePlate}")
+    public ResponseEntity<Object> deleteAction(@PathVariable("licensePlate") String licensePlate) {
+        boolean check = service.deleteAction(licensePlate);
+        if (check) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.badRequest().body("No car found");
+        }
     }
 }

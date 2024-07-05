@@ -14,4 +14,10 @@ public class CarPartDto {
     public double price;
 
     public Set<Action> actions;
+
+    public Long getId() {
+        return id;
+    }
+
 }
+

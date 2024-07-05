@@ -1,6 +1,7 @@
 package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
+import nl.theijken.apkkeuringsation.dto.ActionDto;
 import nl.theijken.apkkeuringsation.dto.CustomerDto;
 import nl.theijken.apkkeuringsation.dto.TicketDto;
 import nl.theijken.apkkeuringsation.service.TicketService;
@@ -45,8 +46,29 @@ public class TicketController {
             return ResponseEntity.created(uri).body(ticketDto);
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<TicketDto> updateTicket(@PathVariable("id") Long id, @RequestBody TicketDto ticketDto) {
+        return ResponseEntity.ok(service.updateTicket(id, ticketDto));
+    }
+
     @GetMapping
     public ResponseEntity<List<TicketDto>> getAllTickets(){
-        return ResponseEntity.ok(service.GetTickets());
+        return ResponseEntity.ok(service.getTickets());
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TicketDto> getTicket(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(service.getTicket(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteTickets(@PathVariable("id") Long id) {
+        boolean check = service.deleteTicket(id);
+        if (check) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.badRequest().body("No ticket found");
+        }
     }
 }

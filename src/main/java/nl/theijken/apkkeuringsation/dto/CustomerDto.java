@@ -17,4 +17,12 @@ public class CustomerDto {
     public LocalDate dob;
 
     public Set<CarDto> cars;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

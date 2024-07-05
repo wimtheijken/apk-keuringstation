@@ -7,6 +7,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "invoices")
 public class Invoice {
+
     @Id
     @SequenceGenerator(name="invoice_number", initialValue=24000)
     private Long invoiceNumber;

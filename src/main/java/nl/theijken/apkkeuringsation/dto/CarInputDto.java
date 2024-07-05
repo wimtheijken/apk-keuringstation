@@ -5,6 +5,7 @@ package nl.theijken.apkkeuringsation.dto;
 import java.time.LocalDate;
 
 public class CarInputDto {
+
     public String licensePlate;
 
     public String brand;
