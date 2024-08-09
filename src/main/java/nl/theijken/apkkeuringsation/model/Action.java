@@ -1,41 +1,43 @@
 package nl.theijken.apkkeuringsation.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "actions")
 public class Action {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String description;
 
     private double hrRate;
 
-    private double labour;
-//    @OneToMany(mappedBy = "wallBracket")
-//    @JsonIgnore
-//    List<TelevisionWallBracket> televisionWallBrackets;
-    @OneToMany(mappedBy = "action")
-    @JsonIgnore
-    private List<CarPart> carParts = new ArrayList<>();
+    private double time;
 
-    @ManyToOne
-    private Ticket ticket;
+    private double labour;
+
+    private double materials;
+
+    private double price;
+
+    @ManyToMany
+    private Set<CarPart> carParts = new HashSet<>();
+
+    @ManyToMany(mappedBy = "actions")
+    @JsonBackReference
+    private Set<Ticket> tickets = new HashSet<>();
 
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setId(Long id) { this.id = id; }
 
     public String getDescription() {
         return description;
@@ -53,29 +55,35 @@ public class Action {
         this.hrRate = hrRate;
     }
 
-    public double getLabour() {
-        return labour;
+    public double getTime() {
+        return time;
     }
 
-    public void setLabour(double labour) {
-        this.labour = labour;
+    public void setTime(double time) {
+        this.time = time;
     }
 
-    public List<CarPart> getCarParts() {
+    public double getLabour() { return labour; }
+
+    public void setLabour(double labour) { this.labour = labour; }
+
+    public double getMaterials() { return materials; }
+
+    public void setMaterials(double materials) { this.materials = materials; }
+
+    public double getPrice() { return price; }
+
+    public void setPrice(double price) { this.price = price; }
+
+    public Set<CarPart> getCarParts() {
         return carParts;
     }
 
-    public void setCarParts(List<CarPart> carParts) {
+    public void setCarParts(Set<CarPart> carParts) {
         this.carParts = carParts;
     }
 
-    public Ticket getTicket() {
-        return ticket;
-    }
+    public Set<Ticket> getTickets() { return tickets; }
 
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
-    }
-
-
+    public void setTickets(Set<Ticket> tickets) { this.tickets = tickets; }
 }

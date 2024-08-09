@@ -1,12 +1,7 @@
 package nl.theijken.apkkeuringsation.dto;
 
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import nl.theijken.apkkeuringsation.model.Action;
-import nl.theijken.apkkeuringsation.model.Invoice;
-
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 public class TicketDto {
 
@@ -16,7 +11,11 @@ public class TicketDto {
 
     public double price;
 
-    public  List<Action> actions;
+    public Set<ActionDto> actions;
 
-    public Invoice invoice;
+    public InvoiceDto invoice;
+
+    public String carLicensePlate;
+
+    public CarDto car;
 }

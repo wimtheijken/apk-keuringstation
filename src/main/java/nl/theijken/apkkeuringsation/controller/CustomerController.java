@@ -1,7 +1,6 @@
 package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
-import nl.theijken.apkkeuringsation.dto.CarDto;
 import nl.theijken.apkkeuringsation.dto.CustomerDto;
 import nl.theijken.apkkeuringsation.service.CustomerService;
 import org.springframework.http.ResponseEntity;
@@ -47,9 +46,34 @@ public class CustomerController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable("id") Long id, @RequestBody CustomerDto customerDto) {
+        return ResponseEntity.ok(service.updateCustomer(id, customerDto));
+    }
+
+//    @PutMapping("/{id}/invoice/{invoiceId}")
+//    public ResponseEntity<Object> assignInvoiceToCustomer(@PathVariable("id") Long id, @PathVariable("invoiceId") Long invoiceId) {
+//        return ResponseEntity.ok(service.assignInvoiceToCustomer(id, invoiceId));
+//    }
+
     @GetMapping
     public ResponseEntity<List<CustomerDto>> getAllCustomers(){
         return ResponseEntity.ok(service.getCustomers());
     }
 
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerDto> getAction(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(service.getCustomer(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteCustomer(@PathVariable("id") Long id) {
+        boolean check = service.deleteCustomer(id);
+        if (check) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.badRequest().body("No customer found");
+        }
+    }
 }

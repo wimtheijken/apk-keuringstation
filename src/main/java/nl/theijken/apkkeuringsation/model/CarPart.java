@@ -1,32 +1,31 @@
 package nl.theijken.apkkeuringsation.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "carparts")
 public class CarPart {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+//    @Column(unique = true)
     private String name;
 
     private double price;
 
-//    @ManyToOne
-//    @MapsId("wallBracketId")
-//    @JoinColumn(name = "wall_bracket_id")
-
-    @ManyToOne
-//    @MapsId("actionId")
-    @JoinColumn(name = "action_id")
-    private Action action;
+    @ManyToMany(mappedBy = "carParts")
+    @JsonBackReference
+    private Set<Action> actions = new HashSet<>();
 
     public Long getId() {
         return id;
     }
+
+    public void setId(Long id) { this.id = id; }
 
     public String getName() {
         return name;
@@ -44,11 +43,11 @@ public class CarPart {
         this.price = price;
     }
 
-    public Action getAction() {
-        return action;
+    public Set<Action> getActions() {
+        return actions;
     }
 
-    public void setAction(Action action) {
-        this.action = action;
+    public void setActions(Set<Action> actions) {
+        this.actions = actions;
     }
 }

@@ -2,20 +2,15 @@ package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
 import nl.theijken.apkkeuringsation.dto.CarPartDto;
-import nl.theijken.apkkeuringsation.dto.CustomerDto;
 import nl.theijken.apkkeuringsation.service.CarPartService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/carparts")
@@ -49,4 +44,28 @@ public class CarPartController {
             return ResponseEntity.created(uri).body(carPartDto);
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CarPartDto> updateCartPart(@PathVariable("id") Long id, @RequestBody CarPartDto carPartDto) {
+//        service.updateAction(id, dto);
+        return ResponseEntity.ok(service.updateCarPart(id, carPartDto));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CarPartDto>> getAllCarParts(){ return ResponseEntity.ok(service.getCarParts()); }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CarPartDto> getCarPart(@PathVariable("id") Long id) { return ResponseEntity.ok( service.getCarPart(id)); }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteCartPart(@PathVariable("id") Long id) {
+        boolean check = service.deleteCarPart(id);
+        if(check) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.badRequest().body("No carpart found");
+        }
+    }
+
+
 }
