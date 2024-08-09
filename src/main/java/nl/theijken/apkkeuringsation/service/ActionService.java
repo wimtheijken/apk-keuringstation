@@ -1,10 +1,10 @@
 package nl.theijken.apkkeuringsation.service;
 
 import nl.theijken.apkkeuringsation.dto.ActionDto;
-import nl.theijken.apkkeuringsation.dto.CarPartDto;
 import nl.theijken.apkkeuringsation.exceptions.RecordNotFoundException;
 import nl.theijken.apkkeuringsation.model.Action;
 import nl.theijken.apkkeuringsation.model.CarPart;
+import nl.theijken.apkkeuringsation.model.Ticket;
 import nl.theijken.apkkeuringsation.repository.ActionRepository;
 import nl.theijken.apkkeuringsation.repository.CarPartRepository;
 import org.springframework.stereotype.Service;
@@ -16,12 +16,15 @@ public class ActionService {
 
         private final ActionRepository actionRepository;
         private final CarPartRepository carPartRepository;
+        private final CarPartService carPartService;
 
-        public ActionService(ActionRepository actionRepository,
-                             CarPartRepository carPartRepository) {
+    public ActionService(ActionRepository actionRepository,
+                         CarPartRepository carPartRepository,
+                         CarPartService carPartService) {
             this.actionRepository = actionRepository;
             this.carPartRepository = carPartRepository;
-        }
+            this.carPartService = carPartService;
+    }
 
         // POST
         public ActionDto createAction(ActionDto actionDto) {
@@ -66,45 +69,58 @@ public class ActionService {
                 throw new RecordNotFoundException("No action found");
             }
             Action storedAction = actionRepository.findById(String.valueOf(id)).orElse(null);
-            storedAction.setId(actionDto.getId());
+            storedAction.setId(actionDto.id);
             storedAction.setDescription(actionDto.description);
             storedAction.setHrRate(actionDto.hrRate);
-            storedAction.setLabour(actionDto.labour);
+            storedAction.setTime(actionDto.time);
+            storedAction.setLabour(actionDto.hrRate * actionDto.time);
+            storedAction.setMaterials(actionDto.materials);
+            storedAction.setPrice(actionDto.price);
             if (actionDto.carParts == null) {
                 actionDto.carParts = new HashSet<>();
             } else {
                 Set<CarPart> carParts = new HashSet<>();
                 storedAction.setCarParts(carParts);
             }
-            storedAction.setTicket(actionDto.ticket);
+            if (actionDto.tickets == null) {
+                actionDto.tickets = new HashSet<>();
+            } else {
+                Set<Ticket> tickets = new HashSet<>();
+                storedAction.setTickets(tickets);
+            }
             return actionToDto(actionRepository.save(storedAction));
         }
 
         //PUT CarPart -> Action
-        public ActionDto assignCarPartToAction(Long id, Long carPartId, ActionDto actionDto) {
+        public ActionDto assignCarPartToAction(Long id, Long carPartId) {
             if(!actionRepository.existsById(String.valueOf(id))) {
                 throw new RecordNotFoundException("No action found");
             }
             Action storedAction = actionRepository.findById(String.valueOf(id)).orElse(null);
-            storedAction.setId(actionDto.getId());
-            storedAction.setDescription(actionDto.description);
-            storedAction.setHrRate(actionDto.hrRate);
-            storedAction.setLabour(actionDto.labour);
             if(!carPartRepository.existsById(String.valueOf(carPartId))) {
                 throw new RecordNotFoundException("No carpart found");
             }
             CarPart carPart = carPartRepository.findById(String.valueOf(carPartId)).orElse(null);
+            Set<CarPart> carParts2 = storedAction.getCarParts();
+            for (CarPart carPart2 : carParts2){
+                assert carPart != null;
+                if(Objects.equals(carPart2.getId(), carPart.getId())) {
+                    throw new RecordNotFoundException( carPart2.getName() + " is already used");
+                }
+            }
             if (storedAction.getCarParts() == null) {
-                storedAction.setCarParts(new HashSet<>());
                 Set<CarPart> carParts = new HashSet<>();
                 carParts.add(carPart);
+                storedAction.setMaterials(carPart.getPrice());
+                storedAction.setPrice(storedAction.getMaterials() + storedAction.getLabour());
                 storedAction.setCarParts(carParts);
             } else {
-                Set<CarPart> carParts = new HashSet<>();
+                Set<CarPart> carParts = storedAction.getCarParts();
                 carParts.add(carPart);
+                storedAction.setMaterials(carPart.getPrice() + storedAction.getMaterials());
+                storedAction.setPrice(storedAction.getMaterials() + storedAction.getLabour());
                 storedAction.setCarParts(carParts);
             }
-            storedAction.setTicket(actionDto.ticket);
             return actionToDto(actionRepository.save(storedAction));
         }
 
@@ -113,36 +129,43 @@ public class ActionService {
         Action action = new Action();
         action.setDescription(actionDto.description);
         action.setHrRate(actionDto.hrRate);
-        action.setLabour(actionDto.labour);
+        action.setTime(actionDto.time);
+        action.setLabour(actionDto.hrRate * actionDto.time);
         if (actionDto.carParts == null) {
             actionDto.carParts = new HashSet<>();
         } else {
             Set<CarPart> carParts = new HashSet<>();
             action.setCarParts(carParts);
+            double total = 0.0;
+            for (CarPart carPart : action.getCarParts()) {
+                total = total + carPart.getPrice();
+            }
+            action.setMaterials(total);
         }
-        action.setTicket(actionDto.ticket);
-
+        if (actionDto.tickets == null) {
+            actionDto.tickets = new HashSet<>();
+        } else {
+            Set<Ticket> tickets = new HashSet<>();
+            action.setTickets(tickets);
+        }
+        action.setPrice(actionDto.price);
         return action;
     }
 
     // MODEL -> DTO
-    private ActionDto actionToDto(Action action) {
+    public ActionDto actionToDto(Action action) {
         ActionDto actionDto = new ActionDto();
         actionDto.id = action.getId();
         actionDto.description = action.getDescription();
         actionDto.hrRate = action.getHrRate();
+        actionDto.time = action.getTime();
         actionDto.labour = action.getLabour();
-        if (action.getCarParts() == null) {
-            action.setCarParts(new HashSet<>());
-        } else {
-            Set<CarPartDto> carParts = new HashSet<>();
-//            for ( CarPart cartPart : action.getCarParts()) {
-//                carParts.add(carpartService.carPartToDto(cartPart));
-//            }
-            actionDto.carParts = carParts;
+        actionDto.materials = action.getMaterials();
+        actionDto.price = action.getPrice();
+        actionDto.carParts = new HashSet<>();
+        for (CarPart carPart : action.getCarParts()) {
+            actionDto.carParts.add(carPartService.carPartToDto(carPart));
         }
-        actionDto.ticket = action.getTicket();
         return actionDto;
     }
-
-    }
+}

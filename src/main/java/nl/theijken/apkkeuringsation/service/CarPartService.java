@@ -1,6 +1,5 @@
 package nl.theijken.apkkeuringsation.service;
 
-import nl.theijken.apkkeuringsation.dto.ActionDto;
 import nl.theijken.apkkeuringsation.dto.CarPartDto;
 import nl.theijken.apkkeuringsation.exceptions.RecordNotFoundException;
 import nl.theijken.apkkeuringsation.model.Action;
@@ -15,12 +14,8 @@ public class CarPartService {
 
     private final CarPartRepository carPartRepository;
 
-//    private final ActionService actionService;
-
     public CarPartService(CarPartRepository carPartRepository) {
-
         this.carPartRepository = carPartRepository;
-//        this.actionService = actionService;
     }
 
     public CarPartDto createCarPart(CarPartDto carPartDto) {
@@ -65,10 +60,16 @@ public class CarPartService {
             throw new RecordNotFoundException("No carpart found");
         }
         CarPart storedCarPart = carPartRepository.findById(String.valueOf(id)).orElse(null);
-        storedCarPart.setId(carPartDto.getId());
+        assert storedCarPart != null;
+        storedCarPart.setId(carPartDto.id);
         storedCarPart.setName(carPartDto.name);
         storedCarPart.setPrice(carPartDto.price);
-        storedCarPart.setActions(carPartDto.actions);
+        if (carPartDto.actions == null) {
+            carPartDto.actions = new HashSet<>();
+        } else {
+            Set<Action> actions = new HashSet<>();
+            storedCarPart.setActions(actions);
+        }
         return carPartToDto(carPartRepository.save(storedCarPart));
     }
 
@@ -87,12 +88,11 @@ public class CarPartService {
     }
 
     // MODEL -> DTO
-    private CarPartDto carPartToDto(CarPart carPart) {
+    public CarPartDto carPartToDto(CarPart carPart) {
         CarPartDto carPartDto = new CarPartDto();
         carPartDto.id = carPart.getId();
         carPartDto.name = carPart.getName();
         carPartDto.price = carPart.getPrice();
-//        carPartDto.actions = actionService.actionToDto(carPart.getActions());
         return carPartDto;
     }
 }

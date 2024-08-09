@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -12,7 +11,7 @@ import java.util.Set;
 public class Customer {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name="first_name", length = 128)
@@ -26,13 +25,14 @@ public class Customer {
     @OneToMany(mappedBy = "customer")
     private Set<Car> cars = new HashSet<>();
 
+    @OneToMany(mappedBy = "customer")
+    private Set<Invoice> invoices = new HashSet<>();
+
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public void setId(Long id) { this.id = id; }
 
     public String getFirstName() {
         return firstName;
@@ -66,4 +66,7 @@ public class Customer {
         this.cars = cars;
     }
 
+    public Set<Invoice> getInvoices() { return invoices; }
+
+    public void setInvoices(Set<Invoice> invoices) { this.invoices = invoices; }
 }

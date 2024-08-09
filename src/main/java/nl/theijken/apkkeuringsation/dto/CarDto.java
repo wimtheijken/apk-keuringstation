@@ -1,9 +1,7 @@
 package nl.theijken.apkkeuringsation.dto;
 
-import nl.theijken.apkkeuringsation.model.Customer;
-
-import javax.xml.transform.sax.SAXResult;
 import java.time.LocalDate;
+import java.util.Set;
 
 public class CarDto {
 
@@ -18,4 +16,6 @@ public class CarDto {
     public LocalDate age;
 
     public String customerFullName;
+
+    public Set<Long> tickets;
 }

@@ -2,8 +2,6 @@ package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
 import nl.theijken.apkkeuringsation.dto.ActionDto;
-import nl.theijken.apkkeuringsation.dto.CarDto;
-import nl.theijken.apkkeuringsation.dto.CarPartDto;
 import nl.theijken.apkkeuringsation.service.ActionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -56,11 +53,9 @@ public class ActionController {
         return ResponseEntity.ok(service.updateAction(id, actionDto));
     }
 
-    //Dit is een andere manier om het te doen, met twee Pathvariables, maar het kan uiteraard ook anders.
-    @PutMapping("/{id}/{carPartId}")
-    public ResponseEntity<Object> assignCarPartToAction(@PathVariable("id") Long id, @PathVariable("carPartId") Long carPartId, @RequestBody ActionDto actionDto) {
-        service.assignCarPartToAction(id, carPartId, actionDto);
-        return ResponseEntity.ok(service.updateAction(id, actionDto));
+    @PutMapping("/{id}/carpart/{carPartId}")
+    public ResponseEntity<Object> assignCarPartToAction(@PathVariable("id") Long id, @PathVariable("carPartId") Long carPartId) {
+        return ResponseEntity.ok(service.assignCarPartToAction(id, carPartId));
     }
 
     @GetMapping

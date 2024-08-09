@@ -3,8 +3,7 @@ package nl.theijken.apkkeuringsation.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -12,17 +11,23 @@ import java.util.Set;
 public class Ticket {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private LocalDate date;
 
     private double price;
 
-    @OneToMany(mappedBy = "ticket")
-    private List<Action> actions = new ArrayList<>();
+    @ManyToMany
+    private Set<Action> actions = new HashSet<>();
 
     @OneToOne(mappedBy = "ticket")
     private Invoice invoice;
+
+    @ManyToOne
+    private Car car;
+
+    private Long customerId;
 
     public Long getId() {
         return id;
@@ -46,11 +51,11 @@ public class Ticket {
         this.price = price;
     }
 
-    public List<Action> getActions() {
+    public Set<Action> getActions() {
         return actions;
     }
 
-    public void setActions(List<Action> actions) {
+    public void setActions(Set<Action> actions) {
         this.actions = actions;
     }
 
@@ -62,4 +67,11 @@ public class Ticket {
         this.invoice = invoice;
     }
 
+    public Car getCar() { return car; }
+
+    public void setCar(Car car) { this.car = car; }
+
+    public Long getCustomerId() { return customerId; }
+
+    public void setCustomerId(Long customerId) { this.customerId = customerId; }
 }

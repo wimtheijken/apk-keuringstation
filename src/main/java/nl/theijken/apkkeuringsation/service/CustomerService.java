@@ -1,15 +1,10 @@
 package nl.theijken.apkkeuringsation.service;
 
-import nl.theijken.apkkeuringsation.dto.ActionDto;
-import nl.theijken.apkkeuringsation.dto.CarPartDto;
 import nl.theijken.apkkeuringsation.dto.CustomerDto;
 import nl.theijken.apkkeuringsation.exceptions.RecordNotFoundException;
-import nl.theijken.apkkeuringsation.model.Action;
-import nl.theijken.apkkeuringsation.model.Car;
-import nl.theijken.apkkeuringsation.model.CarPart;
-import nl.theijken.apkkeuringsation.model.Customer;
+import nl.theijken.apkkeuringsation.model.*;
 import nl.theijken.apkkeuringsation.repository.CustomerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import nl.theijken.apkkeuringsation.repository.InvoiceRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -20,7 +15,8 @@ public class CustomerService {
     private final CustomerRepository customerRepository;
     private final CarService carService;
 
-    public CustomerService(CustomerRepository customerRepository, CarService carService) {
+    public CustomerService(CustomerRepository customerRepository,
+                           CarService carService) {
         this.customerRepository = customerRepository;
         this.carService = carService;
     }
@@ -68,7 +64,7 @@ public class CustomerService {
             throw new RecordNotFoundException("No customer found");
         }
         Customer storedCustomer = customerRepository.findById(id).orElse(null);
-        storedCustomer.setId(customerDto.getId());
+        storedCustomer.setId(customerDto.id);
         storedCustomer.setFirstName(customerDto.firstName);
         storedCustomer.setLastName(customerDto.lastName);
         storedCustomer.setDob(customerDto.dob);
@@ -87,7 +83,6 @@ public class CustomerService {
         customer.setFirstName(customerDto.firstName);
         customer.setLastName(customerDto.lastName);
         customer.setDob(customerDto.dob);
-    // Assuming customerDto.cars is a Set<CarDto>
         if (customerDto.cars == null) {
             customerDto.cars = new HashSet<>();
         } else {
@@ -98,13 +93,19 @@ public class CustomerService {
     }
 
     // MODEL -> DTO
-    private CustomerDto customerToDto(Customer customer) {
+    public CustomerDto customerToDto(Customer customer) {
         CustomerDto customerDto = new CustomerDto();
         customerDto.id = customer.getId();
         customerDto.firstName = customer.getFirstName();
         customerDto.lastName = customer.getLastName();
         customerDto.dob = customer.getDob();
         customerDto.cars = carService.carsToDtos(customer.getCars());
+        customerDto.invoices = new HashSet<>();
+        if (customer.getInvoices() != null) {
+            for (Invoice invoice : customer.getInvoices()) {
+                customerDto.invoices.add(invoice.getInvoiceNumber());
+            }
+        }
         return customerDto;
     }
 }

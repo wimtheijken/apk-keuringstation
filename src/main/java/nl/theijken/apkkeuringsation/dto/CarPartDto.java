@@ -1,8 +1,5 @@
 package nl.theijken.apkkeuringsation.dto;
 
-import jakarta.persistence.*;
-import nl.theijken.apkkeuringsation.model.Action;
-
 import java.util.Set;
 
 public class CarPartDto {
@@ -13,11 +10,6 @@ public class CarPartDto {
 
     public double price;
 
-    public Set<Action> actions;
-
-    public Long getId() {
-        return id;
-    }
-
+    public Set<ActionDto> actions;
 }
 

@@ -1,24 +1,38 @@
 package nl.theijken.apkkeuringsation.service;
 
 import nl.theijken.apkkeuringsation.dto.InvoiceDto;
-import nl.theijken.apkkeuringsation.dto.CarPartDto;
 import nl.theijken.apkkeuringsation.exceptions.RecordNotFoundException;
-import nl.theijken.apkkeuringsation.model.Invoice;
-import nl.theijken.apkkeuringsation.model.CarPart;
-import nl.theijken.apkkeuringsation.model.Ticket;
+import nl.theijken.apkkeuringsation.model.*;
+import nl.theijken.apkkeuringsation.repository.CustomerRepository;
 import nl.theijken.apkkeuringsation.repository.InvoiceRepository;
+import nl.theijken.apkkeuringsation.repository.TicketRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.text.DecimalFormat;
 
 @Service
 public class InvoiceService {
 
     private final InvoiceRepository invoiceRepository;
+    private final TicketRepository ticketRepository;
+    private final CustomerRepository customerRepository;
+    private final TicketService ticketService;
+    private final CustomerService customerService;
 
-    public InvoiceService(InvoiceRepository invoiceRepository) {
+    private static final DecimalFormat decfor = new DecimalFormat("0.00");
+
+    public InvoiceService(InvoiceRepository invoiceRepository,
+                          TicketRepository ticketRepository,
+                          CustomerRepository customerRepository,
+                          TicketService ticketService,
+                          CustomerService customerService) {
         this.invoiceRepository = invoiceRepository;
+        this.ticketRepository = ticketRepository;
+        this.customerRepository = customerRepository;
+        this.ticketService = ticketService;
+        this.customerService = customerService;
     }
 
     // POST
@@ -58,29 +72,32 @@ public class InvoiceService {
         return false;
     }
 
-    // PUT
-    public InvoiceDto updateInvoice(Long invoiceNumber, InvoiceDto invoiceDto) {
-        if(!invoiceRepository.existsById(invoiceNumber)) {
-            throw new RecordNotFoundException("No invoice found");
-        }
-        Invoice storedInvoice = invoiceRepository.findById(invoiceNumber).orElse(null);
-        storedInvoice.setInvoiceNumber(invoiceDto.invoiceNumber);
-        storedInvoice.setDate(invoiceDto.date);
-        storedInvoice.setVat(invoiceDto.vat);
-        storedInvoice.setPrice(invoiceDto.price);
-        storedInvoice.setTotal(invoiceDto.total);
-        storedInvoice.setTicket(invoiceDto.ticket);
-        return invoiceToDto(invoiceRepository.save(storedInvoice));
-    }
-
-    // DTO -> MODEL
     private Invoice dtoToInvoice(InvoiceDto invoiceDto) {
         Invoice invoice = new Invoice();
-        invoice.setDate(invoiceDto.date);
-        invoice.setVat(invoiceDto.vat);
-        invoice.setPrice(invoiceDto.price);
-        invoice.setTotal(invoiceDto.total);
-        invoice.setTicket(invoiceDto.ticket);
+        invoice.setDate(LocalDate.now());
+        invoice.setVatPercentage(invoiceDto.vatPercentage);
+        if(!ticketRepository.existsById(invoiceDto.ticketId)) {
+            throw new RecordNotFoundException("No ticket found");
+        }
+        Ticket ticket = ticketRepository.findById(invoiceDto.ticketId).orElse(null);
+        List<Invoice> invoices = invoiceRepository.findAll();
+        for (Invoice invoice2 : invoices){
+            if(ticket == invoice2.getTicket()) {
+                throw new RecordNotFoundException("Ticket is already used");
+            }
+        }
+        assert ticket != null;
+        invoice.setPrice(ticket.getPrice());
+        double rounded = Math.round(ticket.getPrice() * invoiceDto.vatPercentage);
+        double vat = rounded / 100;
+        invoice.setVat(vat);
+        invoice.setTotal(ticket.getPrice() + vat );
+        if(invoiceDto.ticketId  != null){
+            Optional<Ticket> ticket2 = ticketRepository.findById(invoiceDto.ticketId);
+            ticket2.ifPresent(invoice::setTicket);
+        }
+        Optional<Customer> customer = customerRepository.findById(ticket.getCustomerId());
+        customer.ifPresent(invoice::setCustomer);
         return invoice;
     }
 
@@ -89,11 +106,16 @@ public class InvoiceService {
         InvoiceDto invoiceDto = new InvoiceDto();
         invoiceDto.invoiceNumber = invoice.getInvoiceNumber();
         invoiceDto.date = invoice.getDate();
-        invoiceDto.vat = invoice.getVat();
+        invoiceDto.vatPercentage = invoice.getVatPercentage();
         invoiceDto.price = invoice.getPrice();
+        invoiceDto.vat = invoice.getVat();
         invoiceDto.total = invoice.getTotal();
-        invoiceDto.ticket = invoice.getTicket();
+        if (invoice.getTicket() != null) {
+        invoiceDto.ticket = ticketService.ticketToDto(invoice.getTicket());
+        }
+        if (invoice.getCustomer() != null) {
+            invoiceDto.customer = customerService.customerToDto(invoice.getCustomer());
+        }
         return invoiceDto;
     }
-
 }

@@ -1,8 +1,6 @@
 package nl.theijken.apkkeuringsation.service;
 
-import nl.theijken.apkkeuringsation.dto.CarDto;
 import nl.theijken.apkkeuringsation.dto.RoleDto;
-import nl.theijken.apkkeuringsation.model.Car;
 import nl.theijken.apkkeuringsation.model.Role;
 import nl.theijken.apkkeuringsation.repository.RoleRepository;
 import org.springframework.stereotype.Service;
@@ -19,15 +17,13 @@ public class RoleService {
 
     public RoleService(RoleRepository repos) {
         this.repos = repos;
-
     }
 
     public List<RoleDto> getAllRoles() {
         List<Role> roles = repos.findAll();
         List<RoleDto> roleDtos = new ArrayList<>();
         for(Role role : roles) {
-            RoleDto roleDto = new RoleDto();
-            roleDto.rolename = role.getRolename();
+            RoleDto roleDto = roleToDto(role);
             roleDtos.add(roleDto);
         }
         return roleDtos;

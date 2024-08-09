@@ -1,8 +1,6 @@
 package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
-import nl.theijken.apkkeuringsation.dto.ActionDto;
-import nl.theijken.apkkeuringsation.dto.CustomerDto;
 import nl.theijken.apkkeuringsation.dto.TicketDto;
 import nl.theijken.apkkeuringsation.service.TicketService;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +48,11 @@ public class TicketController {
     @PutMapping("/{id}")
     public ResponseEntity<TicketDto> updateTicket(@PathVariable("id") Long id, @RequestBody TicketDto ticketDto) {
         return ResponseEntity.ok(service.updateTicket(id, ticketDto));
+    }
+
+    @PutMapping("/{id}/action/{actionId}")
+    public ResponseEntity<Object> assignActionToTicket(@PathVariable("id") Long id, @PathVariable("actionId") Long actionId) {
+        return ResponseEntity.ok(service.assignActionToTicket(id, actionId));
     }
 
     @GetMapping

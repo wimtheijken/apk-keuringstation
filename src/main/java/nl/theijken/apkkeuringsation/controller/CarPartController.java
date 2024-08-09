@@ -1,15 +1,11 @@
 package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
-import nl.theijken.apkkeuringsation.dto.ActionDto;
 import nl.theijken.apkkeuringsation.dto.CarPartDto;
-import nl.theijken.apkkeuringsation.dto.CustomerDto;
 import nl.theijken.apkkeuringsation.service.CarPartService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 

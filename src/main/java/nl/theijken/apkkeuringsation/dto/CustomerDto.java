@@ -1,10 +1,7 @@
 package nl.theijken.apkkeuringsation.dto;
 
-import nl.theijken.apkkeuringsation.model.Car;
-
 import java.time.LocalDate;
 import java.util.Set;
-
 
 public class CustomerDto {
 
@@ -18,11 +15,5 @@ public class CustomerDto {
 
     public Set<CarDto> cars;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Set<Long> invoices;
 }

@@ -5,7 +5,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 
-import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -20,5 +19,4 @@ public class Role {
     public String getRolename() {
         return rolename;
     }
-
 }

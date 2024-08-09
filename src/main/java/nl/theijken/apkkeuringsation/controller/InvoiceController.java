@@ -46,11 +46,6 @@ public class InvoiceController {
         }
     }
 
-    @PutMapping("/{invoiceNumber}")
-    public ResponseEntity<InvoiceDto> updateInvoice(@PathVariable("invoiceNumber") Long invoiceNumber, @RequestBody InvoiceDto  invoiceDto) {
-        return ResponseEntity.ok(service.updateInvoice(invoiceNumber,  invoiceDto));
-    }
-
     @GetMapping
     public ResponseEntity<List<InvoiceDto>> getAllInvoices() {
         return ResponseEntity.ok(service.getInvoices());
@@ -70,5 +65,4 @@ public class InvoiceController {
             return ResponseEntity.badRequest().body("No invoice found");
         }
     }
-
 }

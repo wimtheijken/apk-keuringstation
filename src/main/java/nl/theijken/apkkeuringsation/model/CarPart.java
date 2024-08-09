@@ -1,20 +1,16 @@
 package nl.theijken.apkkeuringsation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.List;
 
 @Entity
 @Table(name = "carparts")
 public class CarPart {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 //    @Column(unique = true)
     private String name;
@@ -24,14 +20,6 @@ public class CarPart {
     @ManyToMany(mappedBy = "carParts")
     @JsonBackReference
     private Set<Action> actions = new HashSet<>();
-
-//    @ManyToMany(mappedBy = "categories")
-//    // Definieert een veel-op-veel relatie met de entiteit Post. "mappedBy" geeft aan dat de eigenaarschap van de relatie wordt beheerd door de "categories" veld in de Post entiteit.
-//    @JsonBackReference
-//    // Voorkomt recursieve problemen tijdens JSON serialisatie/deserialisatie door te voorkomen dat posts die bij deze categorie horen direct worden opgenomen in de JSON representatie van een categorie. Dit helpt oneindige recursie te voorkomen wanneer er bidirectionele relaties zijn.
-//    private List<Post> posts = new ArrayList<>();
-//    // Een lijst van posts die tot deze categorie behoren. Dit vertegenwoordigt de andere kant van de veel-op-veel relatie tussen categorieën en posts.
-
 
     public Long getId() {
         return id;

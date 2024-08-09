@@ -3,6 +3,7 @@ package nl.theijken.apkkeuringsation.model;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Table(name = "cars")
@@ -21,13 +22,12 @@ public class Car {
     @ManyToOne
     private Customer customer;
 
-    public String getLicensePlate() {
-        return licensePlate;
-    }
+    @OneToMany(mappedBy = "car")
+    private Set<Ticket> tickets;
 
-    public void setLicensePlate(String licensePlate) {
-        this.licensePlate = licensePlate;
-    }
+    public String getLicensePlate() { return licensePlate; }
+
+    public void setLicensePlate(String licensePlate) { this.licensePlate = licensePlate; }
 
     public String getBrand() {
         return brand;
@@ -65,4 +65,7 @@ public class Car {
         this.customer = customer;
     }
 
+    public Set<Ticket> getTickets() { return tickets; }
+
+    public void setTickets(Set<Ticket> tickets) { this.tickets = tickets; }
 }

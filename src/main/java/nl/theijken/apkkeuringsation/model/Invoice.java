@@ -9,10 +9,12 @@ import java.time.LocalDate;
 public class Invoice {
 
     @Id
-    @SequenceGenerator(name="invoice_number", initialValue=24000)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long invoiceNumber;
 
     private LocalDate date;
+
+    public double vatPercentage;
 
     private double vat;
 
@@ -23,13 +25,12 @@ public class Invoice {
     @OneToOne
     private Ticket ticket;
 
-    public Long getInvoiceNumber() {
-        return invoiceNumber;
-    }
+    @ManyToOne
+    private Customer customer;
 
-    public void setInvoiceNumber(Long invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
-    }
+    public Long getInvoiceNumber() { return invoiceNumber; }
+
+    public void setInvoiceNumber(Long invoiceNumber) { this.invoiceNumber = invoiceNumber; }
 
     public LocalDate getDate() {
         return date;
@@ -38,6 +39,10 @@ public class Invoice {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    public double getVatPercentage() { return vatPercentage; }
+
+    public void setVatPercentage(double vatPercentage) { this.vatPercentage = vatPercentage; }
 
     public double getVat() {
         return vat;
@@ -63,11 +68,11 @@ public class Invoice {
         this.total = total;
     }
 
-    public Ticket getTicket() {
-        return ticket;
-    }
+    public Ticket getTicket() { return ticket; }
 
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
-    }
+    public void setTicket(Ticket ticket) { this.ticket = ticket; }
+
+    public Customer getCustomer() { return customer; }
+
+    public void setCustomer(Customer customer) { this.customer = customer; }
 }

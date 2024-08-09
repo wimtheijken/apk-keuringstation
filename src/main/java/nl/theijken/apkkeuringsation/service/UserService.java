@@ -7,7 +7,6 @@ import nl.theijken.apkkeuringsation.repository.RoleRepository;
 import nl.theijken.apkkeuringsation.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.*;
 
@@ -26,23 +25,7 @@ public class UserService {
         this.roleService = roleService;
     }
 
-//    public UserDto createUser(UserDto userDto) {
-//        User user = new User();
-//        user.setUsername(userDto.username);
-//        user.setPassword(encoder.encode(userDto.password));
-//
-//        Set<Role> userRoles = user.getRoles();
-//        for (String rolename : userDto.roles) {
-//            Optional<Role> or = roleRepos.findById("ROLE_" + rolename);
-//            if (or.isPresent()) {
-//                userRoles.add(or.get());
-//            }
-//        }
-//        userRepos.save(user);
-//        return userDto;
-//    }
-
-    // POST
+//     POST
     public UserDto createUser(UserDto userDto) {
         User user = dtoToUser(userDto);
         User savedUser = userRepos.save(user);
@@ -85,16 +68,32 @@ public class UserService {
             throw new RecordNotFoundException("No user found");
         }
         User storedUser = userRepos.findById(String.valueOf(username)).orElse(null);
+        assert storedUser != null;
         storedUser.setUsername(userDto.username);
         storedUser.setPassword(encoder.encode(userDto.password));
-//        Set<Role> userRoles = storedUser.getRoles();
-//        for (RoleDto rolename : userDto.roles) {
-//            Optional<Role> or = roleRepos.findById("ROLE_" + rolename);
-//            if (or.isPresent()) {
-//                userRoles.add(or.get());
-//            }
-//            storedUser.setRoles(userRoles);
-//        }
+        return userToDto(userRepos.save(storedUser));
+    }
+
+    // PUT ROLE -> USER
+    public UserDto assignRoleToUser(String username, String rolename) {
+        if(!userRepos.existsById(String.valueOf(username))) {
+            throw new RecordNotFoundException("No user found");
+        }
+        User storedUser = userRepos.findById(String.valueOf(username)).orElse(null);
+        if(!roleRepos.existsById(String.valueOf(rolename))) {
+            throw new RecordNotFoundException("No role found");
+        }
+        Role role = roleRepos.findById(String.valueOf(rolename)).orElse(null);
+        assert storedUser != null;
+        if (storedUser.getRoles() == null) {
+            Set<Role> roles = new HashSet<>();
+            roles.add(role);
+            storedUser.setRoles(roles);
+        } else {
+            Set<Role> roles = storedUser.getRoles();
+            roles.add(role);
+            storedUser.setRoles(roles);
+        }
         return userToDto(userRepos.save(storedUser));
     }
 
@@ -103,15 +102,12 @@ public class UserService {
         User user = new User();
         user.setUsername(userDto.username);
         user.setPassword(encoder.encode(userDto.password));
-
-//        Set<Role> userRoles = user.getRoles();
-//        for (RoleDto rolename : userDto.roles) {
-//            Optional<Role> or = roleRepos.findById("ROLE_" + rolename);
-//            if (or.isPresent()) {
-//                userRoles.add(or.get());
-//            }
-//            user.setRoles(userRoles);
-//        }
+        List<User> users = userRepos.findAll();
+        for (User user2 : users){
+            if(Objects.equals(user2.getUsername(), userDto.username)) {
+                throw new RecordNotFoundException("Username is already in use");
+            }
+        }
         return user;
     }
 

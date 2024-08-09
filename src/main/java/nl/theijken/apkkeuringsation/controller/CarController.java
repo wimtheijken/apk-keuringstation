@@ -1,11 +1,9 @@
 package nl.theijken.apkkeuringsation.controller;
 
 import jakarta.validation.Valid;
-import nl.theijken.apkkeuringsation.dto.ActionDto;
 import nl.theijken.apkkeuringsation.dto.CarDto;
 import nl.theijken.apkkeuringsation.dto.CarInputDto;
 import nl.theijken.apkkeuringsation.service.CarService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -14,7 +12,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cars")
@@ -53,6 +50,11 @@ public class CarController {
     @PutMapping("/{licensePlate}")
     public ResponseEntity<CarDto> updateCar(@PathVariable("licensePlate") String licensePlate, @RequestBody CarInputDto carDto) {
         return ResponseEntity.ok(service.updateCar(licensePlate, carDto));
+    }
+
+    @PutMapping("/{licensePlate}/ticket/{ticketId}")
+    public ResponseEntity<Object> assignTicketToCar(@PathVariable("licensePlate") String licensePlate, @PathVariable("ticketId") Long ticketId) {
+        return ResponseEntity.ok(service.assignTicketToCar(licensePlate, ticketId));
     }
 
     @GetMapping
