@@ -49,15 +49,54 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**").permitAll()
-                        .requestMatchers("/admin/*").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/teachers").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/customers").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/users").permitAll()
+
+//                        LOGIN
                         .requestMatchers(HttpMethod.POST, "/auth").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/roles").permitAll()
-                        .requestMatchers("/hello").authenticated()
-                        .requestMatchers(HttpMethod.POST, "*/*").permitAll()
+
+//                        ADMIN / BACKOFFICE
+                        .requestMatchers(HttpMethod.POST, "/actions").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.PUT, "/actions/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.DELETE, "/actions/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.POST, "/carparts").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.PUT, "/carparts/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.DELETE, "/carparts/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.DELETE, "/cars/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.DELETE, "/customers/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.DELETE, "/invoices/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.DELETE, "/tickets/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.DELETE, "/users/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.PUT, "/users/*").hasRole("ADMIN") // ADMIN - password adjusment
+                        .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.GET, "/users/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.DELETE, "/users/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.GET, "/roles/*").hasRole("ADMIN") // ADMIN
+                        .requestMatchers(HttpMethod.GET, "/roles").hasRole("ADMIN") // ADMIN
+
+//                        CASHIER
+                        .requestMatchers(HttpMethod.POST, "/cars").hasAnyRole("ADMIN", "CASHIER") // CASHIER & ADMIN
+                        .requestMatchers(HttpMethod.PUT, "/cars/*").hasAnyRole("ADMIN", "CASHIER") // CASHIER & ADMIN
+                        .requestMatchers(HttpMethod.POST, "/customers").hasAnyRole("ADMIN", "CASHIER") // CASHIER & ADMIN
+                        .requestMatchers(HttpMethod.PUT, "/customers/*").hasAnyRole("ADMIN", "CASHIER") // CASHIER & ADMIN
+                        .requestMatchers(HttpMethod.GET, "/customers").hasAnyRole("ADMIN", "CASHIER") // CASHIER & ADMIN
+                        .requestMatchers(HttpMethod.GET, "/customers/*").hasAnyRole("ADMIN", "CASHIER") // CASHIER & ADMIN
+                        .requestMatchers(HttpMethod.POST, "/invoices").hasAnyRole("ADMIN", "CASHIER") // CASHIER & ADMIN
+                        .requestMatchers(HttpMethod.GET, "/invoices").hasAnyRole("ADMIN", "CASHIER") // CASHIER & ADMIN
+                        .requestMatchers(HttpMethod.GET, "/invoices/*").hasAnyRole("ADMIN", "CASHIER") // CASHIER & ADMIN
+
+//                        MECHANIC
+                        .requestMatchers(HttpMethod.POST, "/tickets").hasAnyRole("ADMIN", "MECHANIC" ) // MECHANIC & ADMIN
+                        .requestMatchers(HttpMethod.PUT, "/tickets/*").hasAnyRole("ADMIN", "MECHANIC" ) // MECHANIC & ADMIN
+                        .requestMatchers(HttpMethod.GET, "/actions").hasAnyRole("ADMIN", "MECHANIC" ) // MECHANIC & ADMIN
+                        .requestMatchers(HttpMethod.GET, "/actions/*").hasAnyRole("ADMIN", "MECHANIC" ) // MECHANIC & ADMIN
+                        .requestMatchers(HttpMethod.GET, "/carparts").hasAnyRole("ADMIN", "MECHANIC" ) // MECHANIC & ADMIN
+                        .requestMatchers(HttpMethod.GET, "/carparts/*").hasAnyRole("ADMIN", "MECHANIC" ) // MECHANIC & ADMIN
+
+//                        CASHIER & MECHANIC
+                        .requestMatchers(HttpMethod.GET, "/cars").hasAnyRole("ADMIN", "CASHIER", "MECHANIC" ) // CASHIER & MECHANIC & ADMIN
+                        .requestMatchers(HttpMethod.GET, "/cars/*").hasAnyRole("ADMIN", "CASHIER", "MECHANIC" ) // CASHIER & MECHANIC & ADMIN
+                        .requestMatchers(HttpMethod.GET, "/tickets").hasAnyRole("ADMIN", "CASHIER", "MECHANIC" ) // CASHIER & MECHANIC & ADMIN
+                        .requestMatchers(HttpMethod.GET, "/tickets/*").hasAnyRole("ADMIN", "CASHIER", "MECHANIC" ) // CASHIER & MECHANIC & ADMIN
                         .anyRequest().denyAll()
                 )
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
