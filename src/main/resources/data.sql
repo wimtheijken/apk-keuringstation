@@ -19,7 +19,7 @@ insert into users_roles(username, rolename) values('Mirjam', 'ROLE_CASHIER');
 
 -- CARPARTS
 -- keuring
-insert into carparts(name, price) values( 'APK-Keuring', 22.50 );
+insert into carparts(name, price) values( 'APK-Keuring', 45.00 );
 
 -- remmen
 insert into carparts(name, price) values( 'Remschijf', 95 );
@@ -39,7 +39,7 @@ insert into carparts(name, price) values( 'Ruitenwisser vloeistof', 25 );
 -- banden
 insert into carparts(name, price) values( 'Autoband', 100 );
 
-insert into actions(description, hr_rate, time, labour, materials, price) values( 'APK Keuring', 45.00, 0.0, 0.00, 22.50, 22.50 );
+insert into actions(description, hr_rate, time, labour, materials, price) values( 'APK Keuring', 45.00, 0.0, 0.00, 45.00, 45.00 );
 insert into actions(description, hr_rate, time, labour, materials, price) values( 'Repareren remmen', 45.00, 2.5, 112.50, 205, 317.50 );
 insert into actions(description, hr_rate, time, labour, materials, price) values( 'Vervangen verlichting', 45.00, 1.5, 67.50, 17, 84.50  );
 insert into actions(description, hr_rate, time, labour, materials, price) values( 'Vervangen ruitenwissers', 45.00, 0.25, 11.25, 50, 64.25  );
