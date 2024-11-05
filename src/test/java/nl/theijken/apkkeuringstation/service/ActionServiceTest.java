@@ -79,6 +79,7 @@ class ActionServiceTest {
         assertEquals(90, result.labour);
         assertEquals(100, result.materials);
         assertEquals(190, result.price);
+        assertEquals(1, result.id);
     }
 
     @Test
