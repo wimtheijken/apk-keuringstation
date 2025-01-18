@@ -19,7 +19,7 @@ insert into users_roles(username, rolename) values('Mirjam', 'ROLE_CASHIER');
 
 -- CARPARTS
 -- keuring
-insert into carparts(name, price) values( 'APK-Keuring', 22.50 );
+insert into carparts(name, price) values( 'APK-Keuring', 45.00 );
 
 -- remmen
 insert into carparts(name, price) values( 'Remschijf', 95 );
@@ -39,7 +39,7 @@ insert into carparts(name, price) values( 'Ruitenwisser vloeistof', 25 );
 -- banden
 insert into carparts(name, price) values( 'Autoband', 100 );
 
-insert into actions(description, hr_rate, time, labour, materials, price) values( 'APK Keuring', 45.00, 0.0, 0.00, 22.50, 22.50 );
+insert into actions(description, hr_rate, time, labour, materials, price) values( 'APK Keuring', 45.00, 0.0, 0.00, 45.00, 45.00 );
 insert into actions(description, hr_rate, time, labour, materials, price) values( 'Repareren remmen', 45.00, 2.5, 112.50, 205, 317.50 );
 insert into actions(description, hr_rate, time, labour, materials, price) values( 'Vervangen verlichting', 45.00, 1.5, 67.50, 17, 84.50  );
 insert into actions(description, hr_rate, time, labour, materials, price) values( 'Vervangen ruitenwissers', 45.00, 0.25, 11.25, 50, 64.25  );
@@ -64,7 +64,7 @@ insert into cars(license_plate, brand, type, color, age, customer_id ) values('9
 insert into cars(license_plate, brand, type, color, age, customer_id ) values('SL-AP-EN', 'Slaap', 'Diep', 'Donker', '2000-01-01', 2 );
 
 
-insert into tickets(date, price, car_license_plate ) values( '2024-08-08', 611.25, '96-ZN-ZX' );
+insert into tickets(date, price, car_license_plate ) values( '2024-08-08', 633.75, '96-ZN-ZX' );
 
 insert into tickets_actions(actions_id, tickets_id) values( 1, 1 );
 insert into tickets_actions(actions_id, tickets_id) values( 2, 1 );
@@ -72,4 +72,4 @@ insert into tickets_actions(actions_id, tickets_id) values( 3, 1 );
 insert into tickets_actions(actions_id, tickets_id) values( 4, 1 );
 insert into tickets_actions(actions_id, tickets_id) values( 5, 1 );
 
-insert into invoices( date, vat_percentage, price, vat, total, ticket_id, customer_id ) values( '2024-08-09', 21.00, 611.25, 128.36, 739.61, 1 ,1 );
+insert into invoices( date, vat_percentage, price, vat, total, ticket_id, customer_id ) values( '2024-08-09', 21.00, 633.75, 133.08, 766.83, 1 ,1 );
