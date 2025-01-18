@@ -2,11 +2,13 @@ package nl.theijken.apkkeuringstation.service;
 
 import nl.theijken.apkkeuringstation.dto.ActionDto;
 import nl.theijken.apkkeuringstation.dto.TicketDto;
+import nl.theijken.apkkeuringstation.exceptions.RecordNotFoundException;
 import nl.theijken.apkkeuringstation.model.Action;
 import nl.theijken.apkkeuringstation.model.Car;
 import nl.theijken.apkkeuringstation.model.Customer;
 import nl.theijken.apkkeuringstation.model.Ticket;
 import nl.theijken.apkkeuringstation.repository.CarRepository;
+import nl.theijken.apkkeuringstation.repository.ActionRepository;
 import nl.theijken.apkkeuringstation.repository.TicketRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,6 +36,9 @@ class TicketServiceTest {
 
     @Mock
     CarRepository carRepository;
+
+    @Mock
+    ActionRepository actionRepository;
 
     @Mock
     ActionService actionService;
@@ -164,14 +169,8 @@ class TicketServiceTest {
     @Test
     void getTicketNotFound() {
         // Arrange
-//        TicketDto ticketDto = new TicketDto();
-//        ticketDto.id = 1L;
-//        ticketDto.date = LocalDate.now();
-//        Ticket ticket = new Ticket();
-//        ticket.setId(1L);
-//        ticket.setDate(LocalDate.now());
         when(ticketRepository.findById(any())).thenReturn(Optional.of(ticket));
-        Optional<Ticket> ticket = Optional.empty();
+//        Optional<Ticket> ticket = Optional.empty();
         // Act
         TicketDto result = ticketService.getTicket(2L);
         // Assert
@@ -264,7 +263,7 @@ class TicketServiceTest {
         ticket.setActions(actions);
         when(!ticketRepository.existsById(any())).thenReturn(true);
         when(ticketRepository.findById(any())).thenReturn(Optional.of(storedTicket));
-        when(ticketRepository.save(any())).thenReturn(Optional.of(ticket));
+        when(ticketRepository.save(any())).thenReturn(ticket);
         // Act
         TicketDto result = ticketService.updateTicket(1L, ticketDto);
         // Assert
@@ -273,13 +272,109 @@ class TicketServiceTest {
 
     @Test
     void assignActionToTicket() {
+        // Arrange
+        Action action = new Action();
+        action.setId(1L);
+        action.setDescription("description");
+        action.setTime(2);
+        action.setHrRate(45);
+        action.setLabour(90);
+        action.setMaterials(100);
+        action.setPrice(190);
+        Action action2 = new Action();
+        action2.setId(2L);
+        action2.setDescription("description");
+        action2.setTime(2);
+        action2.setHrRate(45);
+        action2.setLabour(90);
+        action2.setMaterials(100);
+        action2.setPrice(190);
+//        Set<Action> actions = new HashSet<>();
+//        actions.add(action);
+        Ticket storedTicket = new Ticket();
+        storedTicket.setDate(LocalDate.now());
+        storedTicket.setId(1L);
+        storedTicket.setPrice(190);
+//        storedTicket.setActions(actions);
+        when(ticketRepository.existsById(any())).thenReturn(true);
+        when(actionRepository.existsById(any())).thenReturn(true);
+        when(ticketRepository.findById(any())).thenReturn(Optional.of(storedTicket));
+        when(actionRepository.findById(any())).thenReturn(Optional.of(action2));
+        when(ticketRepository.save(any())).thenReturn(storedTicket);
+        // Act
+        TicketDto result = ticketService.assignActionToTicket(1L, 1L);
+        // Assert
+        assertEquals( 1L, result.id);
+    }
+
+    @Test
+    void assignActionToTicketWithoutActions() {
+        // Arrange
+        Action action = new Action();
+        action.setId(1L);
+        action.setDescription("description");
+        action.setTime(2);
+        action.setHrRate(45);
+        action.setLabour(90);
+        action.setMaterials(100);
+        action.setPrice(190);
+//        Set<Action> actions = new HashSet<>();
+//        actions.isEmpty();
+        Ticket storedTicket = new Ticket();
+        storedTicket.setDate(LocalDate.now());
+        storedTicket.setId(1L);
+        storedTicket.setPrice(190);
+//        storedTicket.setActions(null);
+        when(ticketRepository.existsById(any())).thenReturn(true);
+        when(actionRepository.existsById(any())).thenReturn(true);
+        when(ticketRepository.findById(any())).thenReturn(Optional.of(storedTicket));
+        when(actionRepository.findById(any())).thenReturn(Optional.of(action));
+        when(ticketRepository.save(any())).thenReturn(storedTicket);
+        // Act
+        TicketDto result = ticketService.assignActionToTicket(1L, 1L);
+        // Assert
+        assertEquals( 1L, result.id);
     }
 
     @Test
     void dtoToTicket() {
+        // Arrange
+        Customer customer = new Customer();
+        customer.setId(1L);
+        customer.setFirstName("Wim");
+        customer.setLastName("Theijken");
+        Car car = new Car();
+        car.setLicensePlate("AB-CD-99");
+        car.setBrand("Toyota");
+        car.setType("Aygo");
+        car.setColor("Red");
+        car.setCustomer(customer);
+        TicketDto ticketDto = new TicketDto();
+        ticketDto.id = 1L;
+        ticketDto.date = LocalDate.now();
+        Ticket ticket = new Ticket();
+        ticket.setId(1L);
+        ticket.setDate(LocalDate.now());
+        when(carRepository.existsById(any())).thenReturn(true);
+        when(carRepository.findById(any())).thenReturn(Optional.of(car));
+        // Act
+        Ticket result = ticketService.dtoToTicket(ticketDto);
+        // Assert
+        assertEquals( LocalDate.now(), result.getDate());
     }
 
     @Test
     void ticketToDto() {
+        // Arrange
+        TicketDto ticketDto = new TicketDto();
+        ticketDto.id = 1L;
+        ticketDto.date = LocalDate.now();
+        Ticket ticket = new Ticket();
+        ticket.setId(1L);
+        ticket.setDate(LocalDate.now());
+        // Act
+        TicketDto result = ticketService.ticketToDto(ticket);
+        // Assert
+        assertEquals( 1L, result.id);
     }
 }

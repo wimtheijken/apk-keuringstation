@@ -72,6 +72,7 @@ public class InvoiceService {
         return false;
     }
 
+    // DTO -> MODEL
     private Invoice dtoToInvoice(InvoiceDto invoiceDto) {
         Invoice invoice = new Invoice();
         invoice.setDate(LocalDate.now());
