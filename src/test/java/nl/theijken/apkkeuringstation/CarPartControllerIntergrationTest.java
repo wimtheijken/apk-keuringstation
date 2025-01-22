@@ -1,5 +1,7 @@
 package nl.theijken.apkkeuringstation;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,7 +21,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @SpringBootTest
 @AutoConfigureMockMvc(addFilters = false)
 @ActiveProfiles("test")
-class ActionControllerIntergrationTest {
+class CarPartControllerIntergrationTest {
     @Autowired
     MockMvc mockMvc;
 
@@ -41,7 +43,12 @@ class ActionControllerIntergrationTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn();
 
-        String createdId = result.getResponse().getContentAsString();
+//        String createdId = result.getResponse().getContentAsString();
+
+        String responseJson = result.getResponse().getContentAsString();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseJson);
+        String createdId = jsonNode.get("id").asText();
 
         // check location field in response header (using Hamcrest regex matcher)
         assertThat(result.getResponse().getHeader("Location"), matchesPattern("^.*/carparts/" + createdId));
@@ -65,7 +72,12 @@ class ActionControllerIntergrationTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn();
 
-        String createdId = result.getResponse().getContentAsString();
+//        String createdId = result.getResponse().getContentAsString();
+
+        String responseJson = result.getResponse().getContentAsString();
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(responseJson);
+        String createdId = jsonNode.get("id").asText();
 
         this.mockMvc
                 .perform(MockMvcRequestBuilders.get("/carparts/" + createdId))

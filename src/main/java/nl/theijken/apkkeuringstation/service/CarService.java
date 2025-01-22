@@ -81,30 +81,30 @@ public class CarService {
     }
 
     //PUT Ticket -> Car
-    public CarDto assignTicketToCar(String licensePlate, Long ticketId) {
-        if(!carRepository.existsById(String.valueOf(licensePlate))) {
-            throw new RecordNotFoundException("No car found");
-        }
-        Car storedCar = carRepository.findById(String.valueOf(licensePlate)).orElse(null);
-        if(!ticketRepository.existsById(ticketId)) {
-            throw new RecordNotFoundException("No ticket found");
-        }
-        Ticket ticket = ticketRepository.findById(ticketId).orElse(null);
-        assert storedCar != null;
-        if (storedCar.getTickets() == null) {
-            Set<Ticket> tickets = new HashSet<>();
-            tickets.add(ticket);
-            storedCar.setTickets(tickets);
-        } else {
-            Set<Ticket> tickets = storedCar.getTickets();
-            tickets.add(ticket);
-            storedCar.setTickets(tickets);
-        }
-        assert ticket != null;
-        ticket.setCar(storedCar);
-        ticketRepository.save(ticket);
-        return carToDto(carRepository.save(storedCar));
-    }
+//    public CarDto assignTicketToCar(String licensePlate, Long ticketId) {
+//        if(!carRepository.existsById(String.valueOf(licensePlate))) {
+//            throw new RecordNotFoundException("No car found");
+//        }
+//        Car storedCar = carRepository.findById(String.valueOf(licensePlate)).orElse(null);
+//        if(!ticketRepository.existsById(ticketId)) {
+//            throw new RecordNotFoundException("No ticket found");
+//        }
+//        Ticket ticket = ticketRepository.findById(ticketId).orElse(null);
+//        assert storedCar != null;
+//        if (storedCar.getTickets() == null) {
+//            Set<Ticket> tickets = new HashSet<>();
+//            tickets.add(ticket);
+//            storedCar.setTickets(tickets);
+//        } else {
+//            Set<Ticket> tickets = storedCar.getTickets();
+//            tickets.add(ticket);
+//            storedCar.setTickets(tickets);
+//        }
+//        assert ticket != null;
+//        ticket.setCar(storedCar);
+//        ticketRepository.save(ticket);
+//        return carToDto(carRepository.save(storedCar));
+//    }
 
     private Car inputDtoToCar(CarInputDto carDto) {
         Car car = new Car();

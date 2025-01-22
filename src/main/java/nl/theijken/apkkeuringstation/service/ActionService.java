@@ -108,13 +108,7 @@ public class ActionService {
                     throw new RecordNotFoundException( carPart2.getName() + " is already used");
                 }
             }
-            if (storedAction.getCarParts() == null) {
-                Set<CarPart> carParts = new HashSet<>();
-                carParts.add(carPart);
-                storedAction.setMaterials(carPart.getPrice());
-                storedAction.setPrice(storedAction.getMaterials() + storedAction.getLabour());
-                storedAction.setCarParts(carParts);
-            } else {
+            if (storedAction.getCarParts() != null){
                 Set<CarPart> carParts = storedAction.getCarParts();
                 carParts.add(carPart);
                 storedAction.setMaterials(carPart.getPrice() + storedAction.getMaterials());
