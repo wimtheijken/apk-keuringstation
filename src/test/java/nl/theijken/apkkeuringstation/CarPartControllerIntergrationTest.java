@@ -43,8 +43,6 @@ class CarPartControllerIntergrationTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn();
 
-//        String createdId = result.getResponse().getContentAsString();
-
         String responseJson = result.getResponse().getContentAsString();
         ObjectMapper objectMapper = new ObjectMapper();
         JsonNode jsonNode = objectMapper.readTree(responseJson);
@@ -71,8 +69,6 @@ class CarPartControllerIntergrationTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn();
-
-//        String createdId = result.getResponse().getContentAsString();
 
         String responseJson = result.getResponse().getContentAsString();
         ObjectMapper objectMapper = new ObjectMapper();
