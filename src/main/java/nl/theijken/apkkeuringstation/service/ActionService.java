@@ -1,6 +1,7 @@
 package nl.theijken.apkkeuringstation.service;
 
 import nl.theijken.apkkeuringstation.dto.ActionDto;
+import nl.theijken.apkkeuringstation.dto.CarPartDto;
 import nl.theijken.apkkeuringstation.exceptions.RecordNotFoundException;
 import nl.theijken.apkkeuringstation.model.Action;
 import nl.theijken.apkkeuringstation.model.CarPart;
@@ -128,11 +129,9 @@ public class ActionService {
         if (actionDto.carParts == null) {
             actionDto.carParts = new HashSet<>();
         } else {
-            Set<CarPart> carParts = new HashSet<>();
-            action.setCarParts(carParts);
             double total = 0.0;
-            for (CarPart carPart : action.getCarParts()) {
-                total = total + carPart.getPrice();
+            for (CarPartDto carPart : actionDto.carParts) {
+                total = total + carPart.price;
             }
             action.setMaterials(total);
         }

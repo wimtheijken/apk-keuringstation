@@ -52,11 +52,6 @@ public class CarController {
         return ResponseEntity.ok(service.updateCar(licensePlate, carDto));
     }
 
-//    @PutMapping("/{licensePlate}/ticket/{ticketId}")
-//    public ResponseEntity<Object> assignTicketToCar(@PathVariable("licensePlate") String licensePlate, @PathVariable("ticketId") Long ticketId) {
-//        return ResponseEntity.ok(service.assignTicketToCar(licensePlate, ticketId));
-//    }
-
     @GetMapping
     public ResponseEntity<List<CarDto>> getAllCars(){
         return ResponseEntity.ok(service.getCars());

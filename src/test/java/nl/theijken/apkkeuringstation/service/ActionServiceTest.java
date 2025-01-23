@@ -67,6 +67,21 @@ class ActionServiceTest {
     @Test
     void createActionWithCarParts() {
         // Arrange
+        Set<CarPart> carParts = new HashSet<>();
+        CarPart carPart = new CarPart();
+        carPart.setId(1L);
+        carPart.setPrice(100);
+        carPart.setName("name");
+        carParts.add(carPart);
+        CarPart carPart2 = new CarPart();
+        carPart2.setId(2L);
+        carPart2.setPrice(100);
+        carPart2.setName("name");
+        carParts.add(carPart2);
+        CarPartDto carPartDto = new CarPartDto();
+        carPartDto.id = 1L;
+        carPartDto.name = "name";
+        carPartDto.price = 100;
         ActionDto actionDto = new ActionDto();
         actionDto.description = "description";
         actionDto.time = 2;
@@ -75,6 +90,7 @@ class ActionServiceTest {
         actionDto.materials = 100;
         actionDto.price = 190;
         actionDto.carParts = new HashSet<>();
+        actionDto.carParts.add(carPartDto);
         actionDto.tickets = new HashSet<>();
         Action action = new Action();
         action.setId(1L);
@@ -84,6 +100,7 @@ class ActionServiceTest {
         action.setLabour(90);
         action.setMaterials(100);
         action.setPrice(190);
+        action.setCarParts(carParts);
         when(actionRepository.save(any())).thenReturn(action);
         // Act
         ActionDto result = actionService.createAction(actionDto);
@@ -94,6 +111,7 @@ class ActionServiceTest {
         assertEquals(90, result.labour);
         assertEquals(100, result.materials);
         assertEquals(190, result.price);
+//        assertEquals(190, result.carParts);
     }
 
     @Test
@@ -142,7 +160,7 @@ class ActionServiceTest {
     void getAction() {
         // Arrange
         Action action = new Action();
-        action.setId(1L);
+        action.setId(2L);
         action.setDescription("description");
         action.setTime(2);
         action.setHrRate(45);
@@ -151,9 +169,9 @@ class ActionServiceTest {
         action.setPrice(190);
         when(actionRepository.findById(any())).thenReturn(Optional.of(action));
         // Act
-        ActionDto result = actionService.getAction(1L);
+        ActionDto result = actionService.getAction(2L);
         // Assert
-        assertEquals(1, result.id);
+        assertEquals(2, result.id);
     }
 
     @Test
@@ -288,28 +306,12 @@ class ActionServiceTest {
         carPart3.setId(3L);
         carPart3.setName("car part name");
         carPart3.setPrice(25);
-//        carParts.add(carPart3);
-//        CarPartDto carPartDto = new CarPartDto();
-//        carPartDto.id = 1L;
-//        carPartDto.name = "name";
-//        carPartDto.price = 100;
-//        ActionDto actionDto = new ActionDto();
-//        actionDto.id = 1L;
-//        actionDto.description = "description";
-//        actionDto.time = 4;
-//        actionDto.hrRate = 45;
-//        actionDto.labour = 90;
-//        actionDto.materials = 100;
-//        actionDto.price = 190;
-//        actionDto.carParts = new HashSet<>();
-//        actionDto.tickets = new HashSet<>();
         Action action = new Action();
         action.setId(1L);
         action.setDescription("description");
         action.setTime(2);
         action.setHrRate(45);
         action.setLabour(90);
-//        action.setMaterials(0);
         action.setPrice(0);
         action.setCarParts(carParts);
         Action action2 = new Action();
@@ -318,7 +320,6 @@ class ActionServiceTest {
         action2.setTime(2);
         action2.setHrRate(45);
         action2.setLabour(90);
-//        action2.setMaterials(0);
         action2.setPrice(0);
         action2.setCarParts(carParts);
         when(actionRepository.existsById(any())).thenReturn(true);
@@ -386,6 +387,7 @@ class ActionServiceTest {
         action.setPrice(0);
         when(actionRepository.existsById(any())).thenReturn(true);
         when(carPartRepository.existsById(any())).thenReturn(true);
+        when(actionRepository.findById(any())).thenReturn(Optional.of(action));
         when(carPartRepository.findById(any())).thenReturn(Optional.of(carPart1));
         String expected = "This carpart is already used";
         // Act

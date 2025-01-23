@@ -51,11 +51,6 @@ public class CustomerController {
         return ResponseEntity.ok(service.updateCustomer(id, customerDto));
     }
 
-//    @PutMapping("/{id}/invoice/{invoiceId}")
-//    public ResponseEntity<Object> assignInvoiceToCustomer(@PathVariable("id") Long id, @PathVariable("invoiceId") Long invoiceId) {
-//        return ResponseEntity.ok(service.assignInvoiceToCustomer(id, invoiceId));
-//    }
-
     @GetMapping
     public ResponseEntity<List<CustomerDto>> getAllCustomers(){
         return ResponseEntity.ok(service.getCustomers());

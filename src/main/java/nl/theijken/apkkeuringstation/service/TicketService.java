@@ -79,10 +79,8 @@ public class TicketService {
             ticketDto.actions = new HashSet<>();
         } else {
             Set<Action> actions = new HashSet<>();
-//            assert storedTicket != null;
             storedTicket.setActions(actions);
         }
-//        assert storedTicket != null;
         return ticketToDto(ticketRepository.save(storedTicket));
     }
 
@@ -92,7 +90,6 @@ public class TicketService {
             throw new RecordNotFoundException("No ticket found");
         }
         Ticket storedTicket = ticketRepository.findById(id).orElse(null);
-//        assert storedTicket != null;
         if(storedTicket.getInvoice() != null ) {
             throw new RecordNotFoundException("Ticket already assigned to invoice");
         }
@@ -129,11 +126,9 @@ public class TicketService {
         if (ticketDto.actions == null) {
             ticketDto.actions = new HashSet<>();
         } else {
-            Set<Action> actions = new HashSet<>();
-            ticket.setActions(actions);
             double total = 0.0;
-            for (Action action : ticket.getActions()) {
-                total = total + action.getPrice();
+            for (ActionDto action : ticketDto.actions) {
+                total = total + action.price;
             }
             ticket.setPrice(total);
         }
@@ -150,9 +145,7 @@ public class TicketService {
         for (Action action : ticket.getActions()) {
             ticketDto.actions.add(actionService.actionToDto(action));
         }
-        if (ticket.getCar() != null) {
-            ticketDto.car = carService.carToDto(ticket.getCar());
-        }
+        ticketDto.car = carService.carToDto(ticket.getCar());
         return ticketDto;
     }
 }

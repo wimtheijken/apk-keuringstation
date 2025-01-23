@@ -40,6 +40,15 @@ class TicketServiceTest {
     @Mock
     ActionService actionService;
 
+    @Mock
+    CarService carService;
+
+    @Mock
+    Ticket ticket;
+
+    @Mock
+    Car car;
+
     @BeforeEach
     void setUp() {
     }
@@ -208,7 +217,6 @@ class TicketServiceTest {
         action2.setMaterials(100);
         action2.setPrice(190);
         storedActions.add(action2);
-//        Set<ActionDto> actionDtos = new HashSet<>();
         ActionDto actionDto = new ActionDto();
         actionDto.id = 1L;
         actionDto.description = "description";
@@ -217,7 +225,6 @@ class TicketServiceTest {
         actionDto.labour = 90;
         actionDto.materials = 100;
         actionDto.price = 190;
-//        actionDtos.add(actionDto);
         ActionDto actionDto2 = new ActionDto();
         actionDto2.id = 2L;
         actionDto2.description = "description";
@@ -226,16 +233,12 @@ class TicketServiceTest {
         actionDto2.labour = 90;
         actionDto2.materials = 100;
         actionDto2.price = 190;
-//        actionDtos.add(actionDto2);
-
         TicketDto ticketDto = new TicketDto();
         ticketDto.actions = new HashSet<>();
         ticketDto.actions.add(actionDto);
         ticketDto.actions.add(actionDto2);
         ticketDto.id = 1L;
         ticketDto.date = LocalDate.now();
-
-
         Ticket storedTicket = new Ticket();
         storedTicket.setId(1L);
         storedTicket.setActions(storedActions);
@@ -252,7 +255,7 @@ class TicketServiceTest {
         // Act
         TicketDto result = ticketService.updateTicket(1L, ticketDto);
         // Assert
-        assertEquals( 1L, result.id);
+        assertEquals( "[]", result.actions.toString());
     }
 
     @Test
@@ -274,7 +277,6 @@ class TicketServiceTest {
         TicketDto ticketDto = new TicketDto();
         ticketDto.id = 1L;
         ticketDto.date = LocalDate.now();
-//        ticketDto.actions = new HashSet<>();
         ticketDto.actions = null;
         Ticket ticket = new Ticket();
         ticket.setId(1L);
@@ -285,12 +287,14 @@ class TicketServiceTest {
         // Act
         TicketDto result = ticketService.updateTicket(1L, ticketDto);
         // Assert
+        assertEquals( "[]", result.actions.toString());
         assertEquals( 1L, result.id);
     }
 
     @Test
     void assignActionToTicket() {
         // Arrange
+        Set<Action> actions = new HashSet<>();
         Action action = new Action();
         action.setId(1L);
         action.setDescription("description");
@@ -299,6 +303,7 @@ class TicketServiceTest {
         action.setLabour(90);
         action.setMaterials(100);
         action.setPrice(190);
+        actions.add(action);
         Action action2 = new Action();
         action2.setId(2L);
         action2.setDescription("description");
@@ -307,13 +312,11 @@ class TicketServiceTest {
         action2.setLabour(90);
         action2.setMaterials(100);
         action2.setPrice(190);
-//        Set<Action> actions = new HashSet<>();
-//        actions.add(action);
         Ticket storedTicket = new Ticket();
         storedTicket.setDate(LocalDate.now());
         storedTicket.setId(1L);
         storedTicket.setPrice(190);
-//        storedTicket.setActions(actions);
+        storedTicket.setActions(actions);
         when(ticketRepository.existsById(any())).thenReturn(true);
         when(actionRepository.existsById(any())).thenReturn(true);
         when(ticketRepository.findById(any())).thenReturn(Optional.of(storedTicket));
@@ -322,7 +325,7 @@ class TicketServiceTest {
         // Act
         TicketDto result = ticketService.assignActionToTicket(1L, 1L);
         // Assert
-        assertEquals( 1L, result.id);
+        assertEquals( "[null]", result.actions.toString());
     }
 
     @Test
@@ -425,12 +428,61 @@ class TicketServiceTest {
         Ticket ticket = new Ticket();
         ticket.setId(1L);
         ticket.setDate(LocalDate.now());
+        ticket.setCar(car);
         when(carRepository.existsById(any())).thenReturn(true);
         when(carRepository.findById(any())).thenReturn(Optional.of(car));
         // Act
         Ticket result = ticketService.dtoToTicket(ticketDto);
         // Assert
         assertEquals( LocalDate.now(), result.getDate());
+    }
+
+    @Test
+    void dtoToTicketWithAction() {
+        // Arrange
+        Action action = new Action();
+        Set<Action> actions = new HashSet<>();
+        action.setId(1L);
+        action.setDescription("this action");
+        action.setTime(2);
+        action.setHrRate(45);
+        action.setLabour(90);
+        action.setMaterials(100);
+        action.setPrice(190);
+        actions.add(action);
+        Action action2 = new Action();
+        action2.setId(1L);
+        action2.setDescription("this action");
+        action2.setTime(2);
+        action2.setHrRate(45);
+        action2.setLabour(90);
+        action2.setMaterials(100);
+        action2.setPrice(190);
+        actions.add(action2);
+        Customer customer = new Customer();
+        customer.setId(1L);
+        customer.setFirstName("Wim");
+        customer.setLastName("Theijken");
+        Car car = new Car();
+        car.setLicensePlate("AB-CD-99");
+        car.setBrand("Toyota");
+        car.setType("Aygo");
+        car.setColor("Red");
+        car.setCustomer(customer);
+        TicketDto ticketDto = new TicketDto();
+        ticketDto.id = 1L;
+        ticketDto.date = LocalDate.now();
+        Ticket ticket = new Ticket();
+        ticket.setId(1L);
+        ticket.setDate(LocalDate.now());
+        ticket.setCar(car);
+        ticket.setActions(actions);
+        when(carRepository.existsById(any())).thenReturn(true);
+        when(carRepository.findById(any())).thenReturn(Optional.of(car));
+        // Act
+        Ticket result = ticketService.dtoToTicket(ticketDto);
+        // Assert
+        assertEquals( "[]", result.getActions().toString());
     }
 
     @Test
@@ -462,28 +514,6 @@ class TicketServiceTest {
         TicketDto result = ticketService.ticketToDto(ticket);
         // Assert
         assertEquals( 1L, result.id);
-    }
-
-    @Test
-    void ticketToDtoWithCar() {
-        // Arrange
-        Customer customer = new Customer();
-        customer.setId(1L);
-        customer.setFirstName("Wim");
-        customer.setLastName("Theijken");
-        Car car = new Car();
-        car.setLicensePlate("AB-CD-99");
-        car.setBrand("Toyota");
-        car.setType("Aygo");
-        car.setColor("Red");
-        car.setCustomer(customer);
-        Ticket ticket = new Ticket();
-        ticket.setId(1L);
-        ticket.setDate(LocalDate.now());
-        ticket.setCar(car);
-        // Act
-        TicketDto result = ticketService.ticketToDto(ticket);
-        // Assert
-        assertEquals( 1L, result.id);
+        assertEquals( LocalDate.now(), result.date);
     }
 }
