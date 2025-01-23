@@ -2,7 +2,6 @@ package nl.theijken.apkkeuringstation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import nl.theijken.apkkeuringstation.dto.CarPartDto;
 
 import java.util.HashSet;
 import java.util.Set;

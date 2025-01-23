@@ -1,6 +1,7 @@
 package nl.theijken.apkkeuringstation.service;
 
 import nl.theijken.apkkeuringstation.dto.ActionDto;
+import nl.theijken.apkkeuringstation.dto.CarPartDto;
 import nl.theijken.apkkeuringstation.exceptions.RecordNotFoundException;
 import nl.theijken.apkkeuringstation.model.Action;
 import nl.theijken.apkkeuringstation.model.CarPart;
@@ -108,13 +109,7 @@ public class ActionService {
                     throw new RecordNotFoundException( carPart2.getName() + " is already used");
                 }
             }
-            if (storedAction.getCarParts() == null) {
-                Set<CarPart> carParts = new HashSet<>();
-                carParts.add(carPart);
-                storedAction.setMaterials(carPart.getPrice());
-                storedAction.setPrice(storedAction.getMaterials() + storedAction.getLabour());
-                storedAction.setCarParts(carParts);
-            } else {
+            if (storedAction.getCarParts() != null){
                 Set<CarPart> carParts = storedAction.getCarParts();
                 carParts.add(carPart);
                 storedAction.setMaterials(carPart.getPrice() + storedAction.getMaterials());
@@ -134,11 +129,9 @@ public class ActionService {
         if (actionDto.carParts == null) {
             actionDto.carParts = new HashSet<>();
         } else {
-            Set<CarPart> carParts = new HashSet<>();
-            action.setCarParts(carParts);
             double total = 0.0;
-            for (CarPart carPart : action.getCarParts()) {
-                total = total + carPart.getPrice();
+            for (CarPartDto carPart : actionDto.carParts) {
+                total = total + carPart.price;
             }
             action.setMaterials(total);
         }
