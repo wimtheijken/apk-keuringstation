@@ -17,11 +17,9 @@ import java.util.List;
 public class ActionController {
 
     private final ActionService service;
-    private final ActionService actionService;
 
-    public ActionController(ActionService service, ActionService actionService) {
+    public ActionController(ActionService service) {
         this.service = service;
-        this.actionService = actionService;
     }
 
     @PostMapping

@@ -66,7 +66,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/tickets/**").hasRole("ADMIN") // ADMIN
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN") // ADMIN
                         .requestMatchers(HttpMethod.POST, "/users").hasRole("ADMIN") // ADMIN
-                        .requestMatchers(HttpMethod.PUT, "/users/**").hasRole("ADMIN") // ADMIN - password adjusment
+                        .requestMatchers(HttpMethod.PUT, "/users/**").hasRole("ADMIN") // ADMIN
                         .requestMatchers(HttpMethod.GET, "/users").hasRole("ADMIN") // ADMIN
                         .requestMatchers(HttpMethod.GET, "/users/**").hasRole("ADMIN") // ADMIN
                         .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole("ADMIN") // ADMIN

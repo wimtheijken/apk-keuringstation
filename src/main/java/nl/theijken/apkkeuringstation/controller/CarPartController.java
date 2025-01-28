@@ -66,6 +66,4 @@ public class CarPartController {
             return ResponseEntity.badRequest().body("No carpart found");
         }
     }
-
-
 }

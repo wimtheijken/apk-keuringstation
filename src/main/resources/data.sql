@@ -15,10 +15,10 @@ insert into users(username, password) values('Piet', '$2a$12$Qb.mt09Z7zU20EPy3Pt
 --   username: Mirjam, password: password - ROLE_CASHIER
 insert into users(username, password) values('Mirjam', '$2a$12$Qb.mt09Z7zU20EPy3PtilOCEi.yBAkzBOUzk1yd4b5UL/2tAVFJgm');
 
---   username: Klaas, password: password - No Role
+--   username: Kees, password: password - No Role
 insert into users(username, password) values('Kees', '$2a$12$Qb.mt09Z7zU20EPy3PtilOCEi.yBAkzBOUzk1yd4b5UL/2tAVFJgm');
 
---   username: Dirk, password: password - No Role
+--   username: Dirk, password: password - ROLE_ADMIN
 insert into users(username, password) values('Dirk', '$2a$12$Qb.mt09Z7zU20EPy3PtilOCEi.yBAkzBOUzk1yd4b5UL/2tAVFJgm');
 
 -- COUPLING TABLE USERS-ROLES
